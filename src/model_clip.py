@@ -75,7 +75,7 @@ class ClipModel():
 
             # Guardar el embedding en un archivo
             torch.save(image_features, embedding_filepath)
-            embeddings[image_file] = image_features
+            embeddings[image_file] = (image_features, idx)
 
         return embeddings
     
