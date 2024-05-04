@@ -29,5 +29,9 @@ def select_images():
         'totalImages': total_images
     })
 
+@app.route('/get_images')
+def get_images():
+    pass # Cridar la funció que retorni el nom de les fotos que s'han de carregar
+
 if __name__ == '__main__':
     app.run(debug=True)
