@@ -49,7 +49,7 @@ class Processor:
         
         
         embeddings = model.process_selected_images(image_vector, images_path=image_path)
-        if selected_image_embedding:
+        if selected_image_pathfile:
             selected_image_embedding = model.process_select_image(image_path=selected_image_pathfile)
             return embeddings, selected_image_embedding
         else:
