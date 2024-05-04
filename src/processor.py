@@ -1,8 +1,9 @@
 #from PIL import Image
 import numpy as np
 import random
-from src.model_clip import ClipModel
-from src.embeds_visualizer_class import EmbedsVisualizer
+from model_clip import ClipModel
+from embeds_visualizer_class import EmbedsVisualizer
+from clusterPrevi import ImageClassifier
 import pickle
 
 """
@@ -38,7 +39,7 @@ class Processor:
         random.shuffle(random_vector)
         return random_vector
     
-    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = False, model_pathfile = None):
+    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = True, model_pathfile = "./models/clip_model.pkl"):
         """
         Given a vector of images, return the embeddings of the images
         """
