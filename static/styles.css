@@ -40,6 +40,25 @@ body {
     justify-content: center;
 }
 
+.selectors-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the selectors */
+.selectors-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Style for the select elements */
+.form-select {
+    width: 100px;
+}
+
 .image-placeholder {
     margin: 0 auto;
     /* This will center the images horizontally */

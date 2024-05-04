@@ -28,20 +28,53 @@
 
         <div class="image-container mt-3">
             <!-- Buttons -->
-            <button id="prevButton" class="btn btn-secondary" style="height: 300px; width: 100px; margin: auto;"><</button>
+            <button id="prevButton" class="btn btn-secondary" style="height: 300px; width: 50px;"><<</button>
+            
             <!-- Uploaded image -->
-            <img id="uploadedImage" class="image-placeholder" src="/static/blank.png" alt="Uploaded Image" style="height: 300px; width: 300px; margin: auto;">
+            <img id="uploadedImage" class="image-placeholder" src="/static/blank.png" alt="Uploaded Image"
+                style="height: 300px; width: 300px; margin: 0 10px;">
+            
+            <!-- Container for selectors -->
+            <div class="selectors-container mt-3">
+                <!-- Selector 1 -->
+                <select id="selector1" class="form-select mb-3" style="width: 200px;">
+                    <option value="option1">Season</option>
+                    <option value="option2">Winter</option>
+                    <option value="option3">Summer</option>
+                    <option value="option4">Spring</option>
+                    <option value="option5">Autumn</option>
+                </select>
+        
+                <!-- Selector 2 -->
+                <select id="selector2" class="form-select mb-3" style="width: 200px;">
+                    <option value="option1">Product type</option>
+                    <option value="option2">Clothes</option>
+                    <option value="option3">Shoes</option>
+                    <option value="option4">Perfumery</option>
+                    <option value="option5">Sport</option>
+                    <option value="option6">Home</option>
+                </select>
+        
+                <!-- Selector 3 -->
+                <select id="selector3" class="form-select" style="width: 200px;">
+                    <option value="option1">Section</option>
+                    <option value="option2">Women</option>
+                    <option value="option3">Men</option>
+                    <option value="option4">Kids</option>
+                </select>
+            </div>
+        
             <!-- Generated outfit image -->
-            <img id="outfitImage" class="image-placeholder" src="/static/blank.png" alt="Generated Outfit Image" style="height: 300px; width: 300px; margin: auto;">
+            <img id="outfitImage" class="image-placeholder" src="/static/blank.png" alt="Generated Outfit Image"
+                style="height: 300px; width: 300px; margin: 0 10px;">
+        
             <!-- Buttons -->
-            <button id="nextButton" class="btn btn-secondary" style="height: 300px; width: 100px; margin: auto;">></button>
+            <button id="nextButton" class="btn btn-secondary" style="height: 300px; width: 50px;">></button>
         </div>
         
-        <div style="position: relative; width: 300px; margin: auto;">
-            <button id="prevButton" style="position: absolute; left: -50px; top: 50%; transform: translateY(-50%);">←</button>
-            <img id="outfitImage" class="image-placeholder" src="/static/blank.png" alt="Generated Outfit Image" style="height: 300px; width: 300px; margin: auto;">
-            <button id="nextButton" style="position: absolute; right: -50px; top: 50%; transform: translateY(-50%);">→</button>
-        </div>
+
+
+
 
         <div class="text-center mt-3">
             <a href="/" class="btn btn-secondary">Back to menu</a>
