@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from src.random_image_selector import RandomImageSelector
 from flask import request
 from flask import jsonify
+from flask import send_from_directory
 
 app = Flask(__name__)
 
@@ -32,6 +33,10 @@ def select_images():
 @app.route('/get_images')
 def get_images():
     pass # Cridar la funció que retorni el nom de les fotos que s'han de carregar
+
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    return send_from_directory('data/images', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
