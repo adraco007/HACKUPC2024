@@ -6,17 +6,20 @@ import time
 import concurrent.futures
 
 # Función para cargar y procesar una imagen
-def process_image(image_path):
+def process_image(image_path, preprocess):
+    print("prepreprocess")
     image = Image.open(image_path)
     image = preprocess(image).unsqueeze(0).to(device)
+    print("preprocess done")
     return image
 
-def train_on_batch(image_files):
-    batch_images = [process_image(image_file) for image_file in image_files]
+def train_on_batch(image_files, preprocess):
+    batch_images = [process_image(image_file, preprocess) for image_file in image_files]
     batch_images = torch.cat(batch_images, dim=0)
     
     with torch.no_grad():
-        image_features = model.encode_image(batch_images)
+        # Forzar el cálculo en la CPU
+        image_features = model.encode_image(batch_images.to("cpu"))
         image_features /= image_features.norm(dim=-1, keepdim=True)
 
     # Procesar cada imagen en el batch
@@ -36,7 +39,7 @@ def chunks(lst, chunk_size):
 
 if __name__ == "__main__":
     # Cargar el modelo CLIP
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cpu"  # Establecer el dispositivo como la CPU
     model, preprocess = clip.load('ViT-B/32', device=device)
 
     # Carpeta con tus imágenes de moda
@@ -49,15 +52,18 @@ if __name__ == "__main__":
         os.makedirs(embeddings_folder)
 
     # Tamaño del batch
-    batch_size = 164
+    batch_size = 64
 
     start_time = time.time()
-
+    chunk_num = 0
     with concurrent.futures.ProcessPoolExecutor() as executor:
         # Dividir las imágenes en chunks de tamaño batch_size y entrenar en paralelo
         for image_chunk in chunks(image_files, batch_size):
-            executor.submit(train_on_batch, image_chunk)
+            executor.submit(train_on_batch, image_chunk, preprocess)
+            print(chunk_num)
+            chunk_num += 1
 
+    print("aqui")
     end_time = time.time()
 
     print("Embeddings generated and saved for all images.")
