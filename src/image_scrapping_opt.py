@@ -26,5 +26,8 @@ def main():
         for index, row in df.head(400).iterrows():
             executor.submit(download_images, row, index)
 
+
 if __name__ == "__main__":
+    if not os.path.exists('./data/images'):
+        os.makedirs('./data/images')
     main()
