@@ -8,9 +8,13 @@ import pickle
 
 class ClipModel():
     def __init__(self):
+        print("Loading CLIP model...")
         self.device = "cpu"
+        print("Loading CLIP model...")
         self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+        print("CLIP model loaded.")
         self.embeddings_folder = './data/embeddings/'
+        print("Embeddings folder set to: ", self.embeddings_folder)
         if not os.path.exists(self.embeddings_folder):
             os.makedirs(self.embeddings_folder)
 
