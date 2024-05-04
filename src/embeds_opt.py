@@ -26,7 +26,7 @@ def preprocess_image(image_path, preprocess, device):
     return image
 
 # Ruta a la imagen seleccionada
-selected_image_path = './data/images/img_111_1.jpg'
+selected_image_path = './data/images/img_300_1.jpg'
 selected_image = preprocess_image(selected_image_path, preprocess, device)
 
 # Generar embedding para la imagen seleccionada
