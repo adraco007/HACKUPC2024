@@ -9,28 +9,61 @@
 
   <body>
     <div class="container">
-      <h1 class="text-center mt-4" id="welcome_text"></h1>
+      <h1 class="text-center mt-4">Welcome to My Flask App</h1>
+      <p class="text-center">This is a basic Flask web application.</p>
+      
+      <form>
+        <div class="mb-3">
+            <label for="imageCountInput" class="form-label">Number of Images to Load:</label>
+            <input type="number" class="form-control" id="imageCountInput" placeholder="Enter number of images">
+        </div>
+        <div class="mb-3">
+            <label for="yearSlider" class="form-label">Select Year:</label>
+            <input type="range" class="form-range" id="yearSlider" min="2000" max="2025" step="1" value="2020">
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Load Images</button>
+      </form>
+      
+      <div class="mt-5">
+          <h2>Additional Information</h2>
+          <p>This is some additional information.</p>
+          <ul>
+              <li>Item 1</li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+          </ul>
+      </div>
 
-      <!-- Button to update code -->
-      <button class="btn btn-primary mt-3" onclick="upload_code()">Upload Code</button>
+      <!-- Button to check similarities -->
+      <button id="checkSimilaritiesBtn" class="btn btn-primary mt-3">Check Similarities</button>
+      
+      <!-- Bar to display selection status -->
+      <div id="selectionBar" class="mt-3">
+        <!-- Bar will be displayed here -->
+      </div>
 
-      <!-- Button to view bot configuration -->
-      <button class="btn btn-primary mt-3" onclick="bot_config()">Bot configuration</button>
-
-      <!-- Button to view player info -->
-      <button class="btn btn-primary mt-3" onclick="player_info()">Player info</button>
-
-      <!-- Button to view replays -->
-      <button class="btn btn-primary mt-3" onclick="replays()">Replays</button>
-
-      <!-- Button to view highscores -->
-      <button class="btn btn-primary mt-3" onclick="highscores()">Highscores</button>
-
-      <!-- Button to the help page -->
-      <button class="btn btn-warning mt-3" onclick="help()">Help and info</button>
-
-      <!-- Button to logout -->
-      <button class="btn btn-secondary mt-3" onclick="logout()">Logout</button>
+      <!-- Script to handle button click and update selection bar -->
+      <script>
+        document.getElementById('checkSimilaritiesBtn').addEventListener('click', function() {
+          // Call random selector
+          fetch('/select_images')
+            .then(response => response.json())
+            .then(data => {
+              // Update selection bar
+              let selectionBar = document.getElementById('selectionBar');
+              selectionBar.innerHTML = ''; // Clear previous content
+              data.imagesToTake.forEach(status => {
+                let color = status === 1 ? 'green' : 'red';
+                let div = document.createElement('div');
+                div.style.width = '20px';
+                div.style.height = '20px';
+                div.style.backgroundColor = color;
+                div.style.display = 'inline-block';
+                selectionBar.appendChild(div);
+              });
+            });
+        });
+      </script>
     </div>
 
   </body>
