@@ -1,8 +1,8 @@
 #from PIL import Image
 import numpy as np
 import random
-from model_clip import ClipModel
-from embeds_visualizer_class import EmbedsVisualizer
+from src.model_clip import ClipModel
+from src.embeds_visualizer_class import EmbedsVisualizer
 import pickle
 
 """
