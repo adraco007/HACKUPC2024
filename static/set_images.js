@@ -5,22 +5,7 @@ document.getElementById('putImagesButton').addEventListener('click', function (e
     event.preventDefault(); // Prevent form submission
 
 
-    let imageGrid = document.getElementById('imageGrid');
-    imageGrid.innerHTML = ''; // Clear previous content
     
-    let urls = [];
-        for (let i = 0; i < 4; i++) {
-            urls.push(`/images/img_${i}_1.jpg`);
-    }
-    
-    for (let i = 0; i < urls.length; i++) {
-        let img = document.createElement('img');
-        img.src = urls[i];
-        img.style.width = '100px'; // Adjust width as needed
-        img.style.height = '100px'; // Adjust height as needed
-        img.style.margin = '5px'; // Add some margin between images
-        imageGrid.appendChild(img);
-    }
 
     /*// Call the Flask function named 'get_images'
     fetch('/get_images')

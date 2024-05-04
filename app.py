@@ -4,6 +4,7 @@ from src.processor import Processor
 from flask import request
 from flask import jsonify
 from flask import send_from_directory
+import os
 
 processor = Processor()
 
@@ -59,6 +60,22 @@ def select_images():
         'similarityVector': similarity_vector.tolist()  # Convert numpy array to list
     })
 
+@app.route('/images_from_index')
+def images_from_index():
+    try:
+        index = int(request.args.get('index'))  # Convert to int
+        print("Index parsed correctly")
+    except:
+        print("Error: index is not an integer")
+        index = 0
+    
+    # From data/images take the image with the index
+    # Get the names of all the images
+    images = os.listdir('data/images')
+    image = images[index]
+
+    # Return the image
+    return send_from_directory('data/images', image)
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
