@@ -31,20 +31,13 @@ document.getElementById('load_images_button').addEventListener('click', function
                 selectionBar.appendChild(div);
             });
 
-            let images_vector = data.similarityVector;
-
-            // Get all the indexs where the value is not 0
-            let indexes = [];
-            for (let i = 0; i < images_vector.length; i++) {
-                if (images_vector[i] !== 0) {
-                    indexes.push(i);
-                }
-            }
+            let indexs = data.indexs; // Get the indexs of the images
+            let similarities = data.similarities; // Get the similarities of the images
 
             let imageGrid = document.getElementById('imageGrid');
             imageGrid.innerHTML = ''; // Clear previous content
 
-            for (let i = 0; i < indexes.length; i++) {
+            for (let i = 0; i < indexs.length; i++) {
                 let img = document.createElement('img');
                 // Use the images_from_index endpoint to get the image
                 img.src = `/images_from_index?index=${indexes[i]}`;

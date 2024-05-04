@@ -52,13 +52,14 @@ def select_images():
     selector = RandomImageSelector(n_images)
     images_to_take, total_images = selector.select_images()
 
-    similarity_vector = processor.select_images(images_to_take)
+    index_list, similarity_list = processor.select_images(images_to_take)
 
     # Return JSON response
     return jsonify({
         'imagesToTake': images_to_take.tolist(),  # Convert numpy array to list
         'totalImages': total_images,
-        'similarityVector': similarity_vector.tolist()  # Convert numpy array to list
+        'indexs': index_list.tolist(), # Convert numpy array to list
+        'similarities': similarity_list.tolist()  # Convert numpy array to list
     })
 
 @app.route('/images_from_index')

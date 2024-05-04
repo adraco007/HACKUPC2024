@@ -69,9 +69,9 @@ class ImageClassifier:
         self.encode_classes()
         intersectionList = self.create_intersection_list()
         encodedIntersectionList = self.encode_intersection_list(intersectionList)
-        self.print_classes()
-        print(f'encodedIntersectionList: {set(encodedIntersectionList)}')
+        #self.print_classes()
+        #print(f'encodedIntersectionList: {set(encodedIntersectionList)}')
 
 # Uso de la clase
-classifier = ImageClassifier()
-classifier.run()
+#classifier = ImageClassifier()
+#classifier.run()
