@@ -1,3 +1,5 @@
+let urls = [];
+
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
 
@@ -25,6 +27,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
             .then(data => {
                 // Handle the result
                 console.log(data);
+                urls = data.urls;
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -2,6 +2,9 @@ console.log("Script to select images loaded"); // Debug message
 document.getElementById('load_images_button').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
 
+    let info2 = document.getElementById('info2');
+    info2.innerHTML = 'Loading images...'; // Set loading message
+
     // Get the amount of images from the input field
     let nImages = document.getElementById('imageCountInput').value;
 
@@ -28,7 +31,7 @@ document.getElementById('load_images_button').addEventListener('click', function
                 selectionBar.appendChild(div);
             });
 
-            let images_vector = data.imagesToTake;
+            let images_vector = data.similarityVector;
 
             // Get all the indexs where the value is not 0
             let indexes = [];
@@ -50,6 +53,8 @@ document.getElementById('load_images_button').addEventListener('click', function
                 img.style.margin = '5px'; // Add some margin between images
                 imageGrid.appendChild(img);
             }
+
+            info2.innerHTML = 'These images that belong to different sets are...'; // Set loaded message
         })
         .catch(error => console.error("Fetch error:", error)); // Debug message
 
