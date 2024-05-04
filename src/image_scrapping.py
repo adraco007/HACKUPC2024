@@ -5,9 +5,10 @@ import requests
 import re 
 
 df = pd.read_csv('./data/inditextech_hackupc_challenge_images.csv')
+num_pictures = 400
 
 # Each row has 3 images, download first 10 rows
-for i in range(400):
+for i in range(num_pictures):
     try:
         path1 = df.iloc[i, 0]
         path2 = df.iloc[i, 1]

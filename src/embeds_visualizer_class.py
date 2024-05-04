@@ -57,13 +57,13 @@ class EmbedsVisualizer:
         image_files.sort()
 
         # Mostrar cada imagen
-        for idx, (image_file_name, (similarity, related_idx)) in enumerate(embeddings.items()):
+        for idx, (image_file_name, (similarity, realted_name)) in enumerate(embeddings.items()):
             image_path = os.path.join('./data/images', f"{image_file_name}")
             img = mpimg.imread(image_path)
             axes[idx].imshow(img)
             axes[idx].axis('off')  # Desactiva los ejes
             axes[idx].set_title(f"Index: {image_file_name}")
-            axes[idx].text(0.5, -0.1, f"Idx sim {image_files[related_idx][4:]}, Sim: {similarity:.2f}", size=10, ha='center', transform=axes[idx].transAxes)
+            axes[idx].text(0.5, -0.1, f"Idx sim {realted_name[4:]}, Sim: {similarity:.2f}", size=10, ha='center', transform=axes[idx].transAxes)
         plt.show()
 
     def calculate_similarities(self, embedding_target_idx, similarities_matrix):
@@ -99,15 +99,15 @@ class EmbedsVisualizer:
         # Encontrar los primeros dos elementos con máxima similitud
         idx_max = np.argmax(similarity_matrix)
         row_idx, col_idx = np.unravel_index(idx_max, similarity_matrix.shape)
-        max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], col_idx)
-        max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], row_idx)
+        max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
+        max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
 
         # Actualizar la matriz de similitudes para excluir los elementos ya encontrados
         similarity_matrix[row_idx, col_idx] = 0
         similarity_matrix[col_idx, row_idx] = 0
 
         # Continuar encontrando los siguientes índices con máxima similitud iterativamente
-        for _ in range(num_images - 1):
+        for _ in range(num_images - 2):
             # Encontrar el máximo en la matriz de similitudes entre pares de imágenes descubiertas y no descubiertas
             max_similarity = (-1, -1)
             for i, name_i in enumerate(max_similarities.keys()):
@@ -115,7 +115,7 @@ class EmbedsVisualizer:
                     if filenames[j] not in max_similarities.keys():
                         similarity = similarity_matrix[filenames.index(name_i), j]
                         if similarity > max_similarity[0]:
-                            max_similarity = (similarity, i)
+                            max_similarity = (similarity, name_i)
                             next_idx = j
                             next_filename = filenames[j]
             # Agregar la imagen con máxima similitud al diccionario
