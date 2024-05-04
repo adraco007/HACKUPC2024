@@ -1,6 +1,37 @@
-{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Main menu</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./static/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
 
-{% block content %}
-<h1>Welcome to My Flask App</h1>
-<p>This is a basic Flask web application.</p>
-{% endblock %}
+  <body>
+    <div class="container">
+      <h1 class="text-center mt-4" id="welcome_text"></h1>
+
+      <!-- Button to update code -->
+      <button class="btn btn-primary mt-3" onclick="upload_code()">Upload Code</button>
+
+      <!-- Button to view bot configuration -->
+      <button class="btn btn-primary mt-3" onclick="bot_config()">Bot configuration</button>
+
+      <!-- Button to view player info -->
+      <button class="btn btn-primary mt-3" onclick="player_info()">Player info</button>
+
+      <!-- Button to view replays -->
+      <button class="btn btn-primary mt-3" onclick="replays()">Replays</button>
+
+      <!-- Button to view highscores -->
+      <button class="btn btn-primary mt-3" onclick="highscores()">Highscores</button>
+
+      <!-- Button to the help page -->
+      <button class="btn btn-warning mt-3" onclick="help()">Help and info</button>
+
+      <!-- Button to logout -->
+      <button class="btn btn-secondary mt-3" onclick="logout()">Logout</button>
+    </div>
+
+  </body>
+</html>
