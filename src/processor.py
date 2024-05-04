@@ -41,9 +41,13 @@ class Processor:
         if created_model:
             model = pickle.load(open(model_pathfile, 'rb'))
         else:
+            print("Creating model")
             model = ClipModel()
+
+        print("Model created")
         
         embeddings = model.process_selected_images(image_vector, images_path=image_path)
+        print("Embeddings processed")
         if selected_image_pathfile:
             selected_image_embedding = model.process_select_image(image_path=selected_image_pathfile)
             return embeddings, selected_image_embedding
