@@ -22,7 +22,7 @@ body {
     transition: 1.5s ease;
   }
   
-  @media (max-width: 1000px) {
+  @media (max-width: 5000px) {
     .container {
       max-width: 100%;
     }
