@@ -2,7 +2,7 @@
 
 data_base: https://drive.google.com/file/d/1OaIzEt20LQk1ixO5UFx7wvOTZef3PKww/view?pli=1
 
-liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?86B0D29196D3A775E8B8D3ADC9A1710530D2
+liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?59D31687B3449869D06577115946691FE2DF
 
 Image Computing for an Ecommerce
 Given a dataset of garment images from various angles, the challenge is to develop an algorithm that identifies 
