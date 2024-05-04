@@ -23,23 +23,30 @@
                 </div>
             </div>
             <!-- Button to upload the file -->
-            <button id="uploadButton" type="button" class="btn btn-primary mt-3">Upload File</button>
+            <button id="uploadButton" type="button" class="btn btn-success mt-3">Upload File</button>
         </form>
 
         <div class="image-container mt-3">
+            <!-- Buttons -->
+            <button id="prevButton" class="btn btn-secondary" style="height: 300px; width: 100px; margin: auto;"><</button>
             <!-- Uploaded image -->
             <img id="uploadedImage" class="image-placeholder" src="/static/blank.png" alt="Uploaded Image" style="height: 300px; width: 300px; margin: auto;">
             <!-- Generated outfit image -->
             <img id="outfitImage" class="image-placeholder" src="/static/blank.png" alt="Generated Outfit Image" style="height: 300px; width: 300px; margin: auto;">
+            <!-- Buttons -->
+            <button id="nextButton" class="btn btn-secondary" style="height: 300px; width: 100px; margin: auto;">></button>
         </div>
         
 
-        <a href="/" class="btn btn-secondary mt-3">Back to Menu</a>
+        <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">Back to Menu</a>
+        </div>
 
 
 
     </div>
     <script src="./static/search.js"></script>
+    <script src="./static/search_buttons.js"></script>
 </body>
 
 </html>
