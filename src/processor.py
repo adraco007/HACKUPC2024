@@ -41,8 +41,11 @@ class Processor:
         if created_model:
             model = pickle.load(open(model_pathfile, 'rb'))
         else:
-            print("Creating model")
-            model = ClipModel()
+            try:
+                model = ClipModel()
+            except Exception as e:
+                print(e)
+                return None
 
         print("Model created")
         
