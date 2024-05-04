@@ -5,13 +5,14 @@ import os
 import time
 
 # Cargar el modelo CLIP
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cpu"
 model, preprocess = clip.load('ViT-B/32', device=device)
 
 # Función para cargar y procesar una imagen
 def process_image(image_path):
     image = Image.open(image_path)
     image = preprocess(image).unsqueeze(0).to(device)
+    print(f'processed image: {image_path}')
     return image
 
 # Carpeta con tus imágenes de moda
@@ -29,7 +30,7 @@ for image_file in image_files:
     with torch.no_grad():
         image_features = model.encode_image(image)
         image_features /= image_features.norm(dim=-1, keepdim=True)
-    
+        print(f'embedding generated for image: {image_file}')
     # Crear un nombre de archivo basado en el nombre de la imagen original
     base_filename = os.path.basename(image_file)
     embedding_filename = os.path.splitext(base_filename)[0] + '.pt'
