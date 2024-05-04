@@ -1,5 +1,3 @@
-let urls = [];
-
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
 
