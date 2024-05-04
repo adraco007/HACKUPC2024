@@ -33,7 +33,7 @@ class Processor:
         print(vector_similaridades)
         return vector_similaridades
     
-    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = True, model_pathfile = "./models/clip_model.pkl"):
+    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = False, model_pathfile = "./models/clip_model.pkl"):
         """
         Given a vector of images, return the embeddings of the images
         """
@@ -49,7 +49,7 @@ class Processor:
         else:
             return embeddings
         
-Processor().select_images([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+#Processor().select_images([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
 
 
