@@ -3,7 +3,7 @@ import numpy as np
 import random
 from model_clip import ClipModel
 from embeds_visualizer_class import EmbedsVisualizer
-from clusterPrevi import ClusterPrevi
+from clusterPrevi import ImageClassifier
 import pickle
 
 """
