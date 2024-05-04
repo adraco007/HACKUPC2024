@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 from src.random_image_selector import RandomImageSelector
+from src.processor import Processor
 from flask import request
 from flask import jsonify
 from flask import send_from_directory
+
+processor = Processor()
 
 app = Flask(__name__)
 
@@ -17,6 +20,8 @@ def process_uploaded_file():
 
     # Save the file
     uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
+
+    similarity_vector = processor.find_outfit()
 
     # No response needed, ok code only
     return '', 200
@@ -45,17 +50,15 @@ def select_images():
     selector = RandomImageSelector(n_images)
     images_to_take, total_images = selector.select_images()
 
-    print(f"Images to take: {n_images}")
+    similarity_vector = processor.select_images(images_to_take)
 
     # Return JSON response
     return jsonify({
         'imagesToTake': images_to_take.tolist(),  # Convert numpy array to list
-        'totalImages': total_images
+        'totalImages': total_images,
+        'similarityVector': similarity_vector.tolist()  # Convert numpy array to list
     })
 
-@app.route('/get_images')
-def get_images():
-    pass # Cridar la funció que retorni el nom de les fotos que s'han de carregar
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
