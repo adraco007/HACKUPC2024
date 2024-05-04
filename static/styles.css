@@ -28,6 +28,13 @@ body {
     }
   }
   
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Four columns */
+    grid-gap: 10px; /* Add some gap between images */
+    justify-items: center; /* Center images horizontally */
+  }
+
   .container_fast_transition {
     transition: 0s;
   }

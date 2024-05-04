@@ -1,4 +1,4 @@
-console.log("Script loaded"); // Debug message
+console.log("Script to select images loaded"); // Debug message
 document.getElementById('load_images_button').addEventListener('click', function(event) {   
 event.preventDefault(); // Prevent form submission
 
