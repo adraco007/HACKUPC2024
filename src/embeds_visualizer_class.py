@@ -76,6 +76,7 @@ class EmbedsVisualizer:
 
     def get_max_similarity(self, embeddings: dict, vector_length: int, num_images=4, images_path='./data/images/'):
         # Inicializar una matriz triangular para almacenar las similitudes
+        assert(num_images >= 2)
         num_embeddings = len(embeddings)
         similarity_matrix = np.zeros((num_embeddings, num_embeddings))
 
@@ -96,7 +97,7 @@ class EmbedsVisualizer:
         # Diccionario para almacenar las imágenes con su similitud correspondiente
         max_similarities = {}
         vector_indices = []
-        similarity_list = []
+        similarity_list = np.zeros((num_images), dtype=np.float64)
 
         # Encontrar los primeros dos elementos con máxima similitud
         idx_max = np.argmax(similarity_matrix)
@@ -104,12 +105,16 @@ class EmbedsVisualizer:
         max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
         max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
 
-        vector_indices.append(embeddings[filenames[row_idx]][1])
-        vector_indices.append(embeddings[filenames[col_idx]][1])
+        vector_indices.append(embeddings[filenames[row_idx]][1][0])
+        vector_indices.append(embeddings[filenames[col_idx]][1][0])
 
-        similarity_list.append(similarity_matrix[row_idx, col_idx])
-        similarity_list.append(similarity_matrix[row_idx, col_idx])
-
+        return_similarity_array_index=0
+        similarity_list[return_similarity_array_index] = similarity_matrix[row_idx, col_idx]
+        return_similarity_array_index+=1
+        similarity_list[return_similarity_array_index] = similarity_matrix[row_idx, col_idx]
+        return_similarity_array_index+=1
+        
+        
         # Actualizar la matriz de similitudes para excluir los elementos ya encontrados
         similarity_matrix[row_idx, col_idx] = 0
         similarity_matrix[col_idx, row_idx] = 0
@@ -132,16 +137,16 @@ class EmbedsVisualizer:
             max_similarities[next_filename] = max_similarity
             indx_vector_general = embeddings[filenames[next_idx]][1]
 
-            vector_indices.append(indx_vector_general)
-            similarity_list.append(max_similarity[0]
-                                   )
+            vector_indices.append(indx_vector_general[0])
+            similarity_list[return_similarity_array_index] = max_similarity[0]
+            return_similarity_array_index+=1
             # Actualizar la matriz de similitudes para excluir los elementos ya encontrados
             similarity_matrix[filenames.index(name_i), filenames.index(next_filename)] = 0
             similarity_matrix[filenames.index(next_filename), filenames.index(name_i)] = 0
 
         self.visualize_embeddings(max_similarities) # En caso de querer visualizar sin web
         
-
+        print(vector_indices)
         return vector_indices, similarity_list
 
 
