@@ -144,7 +144,7 @@ class EmbedsVisualizer:
             similarity_matrix[filenames.index(name_i), filenames.index(next_filename)] = 0
             similarity_matrix[filenames.index(next_filename), filenames.index(name_i)] = 0
 
-        self.visualize_embeddings(max_similarities) # En caso de querer visualizar sin web
+        #self.visualize_embeddings(max_similarities) # En caso de querer visualizar sin web
         
         print(vector_indices)
         return vector_indices, similarity_list

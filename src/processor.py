@@ -27,7 +27,7 @@ class Processor:
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
 
-        embeddings = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=True, model_pathfile="./models/clip_model.pkl")
+        embeddings = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=False, model_pathfile="./models/clip_model.pkl")
         vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings,  vector_length=len(vector))
         #image = Image.open('data/generated_images/image1.png')
         print(vector_similaridades)
