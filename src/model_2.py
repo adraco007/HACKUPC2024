@@ -2,6 +2,7 @@ import clip
 import torch
 from PIL import Image
 import os
+import time
 
 # Cargar el modelo CLIP
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -21,7 +22,7 @@ image_files = [os.path.join(image_folder, filename) for filename in os.listdir(i
 embeddings_folder = './data/embeddings/'
 if not os.path.exists(embeddings_folder):
     os.makedirs(embeddings_folder)
-
+start_time = time.time()
 # Generar y guardar embeddings para cada imagen
 for image_file in image_files:
     image = process_image(image_file)
@@ -36,5 +37,7 @@ for image_file in image_files:
     
     # Guardar el embedding en un archivo
     torch.save(image_features, embedding_filepath)
-
+end_time = time.time()
 print("Embeddings generated and saved for all images.")
+
+print(f"Time taken: {end_time - start_time} seconds")
