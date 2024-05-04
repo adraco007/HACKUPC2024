@@ -1,16 +1,29 @@
 import time
 
-t0 = time.time()
+
 
 import torch
 import clip
+import os
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cpu"
 model, preprocess = clip.load('ViT-B/32', device=device)
 
-# Cargar los embeddings desde el archivo
-embeddings = torch.load('./data/image_embeddings.pt')
+embeddings_dir = './data/embeddings/'
 
+# Lista para almacenar los nombres de archivo de los embeddings
+embedding_files = os.listdir(embeddings_dir)
+
+# Diccionario para almacenar los embeddings
+embeddings = {}
+t0 = time.time()
+# Cargar cada embedding desde su archivo respectivo
+for file_name in embedding_files:
+    embedding_path = os.path.join(embeddings_dir, file_name)
+    embedding = torch.load(embedding_path, map_location=device)
+    embeddings[file_name] = embedding
+print(f'Embeddings loaded in t: {time.time()-t0}s')
+t0 = time.time()
 from PIL import Image
 
 def preprocess_image(image_path, preprocess):
@@ -47,7 +60,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 # Suponiendo que ya has calculado las cinco imágenes más similares como en el código anterior
-top_5_similar_images = sorted_similarities[:5]
+num_pics = 5
+top_5_similar_images = sorted_similarities[:num_pics]
 
 # Configurar la visualización
 fig, axes = plt.subplots(1, 5, figsize=(20, 4))  # Ajusta el tamaño según necesites
@@ -55,13 +69,14 @@ fig.suptitle('Top 5 Similar Images')
 
 # Mostrar cada imagen
 for idx, (image_path, similarity) in enumerate(top_5_similar_images):
+    image_path = os.path.join('./data/images', image_path.replace('.pt', '.jpg'))
     img = mpimg.imread(image_path)
     axes[idx].imshow(img)
     axes[idx].axis('off')  # Desactiva los ejes
     axes[idx].set_title(f"Sim: {similarity:.2f}")
 
 t1 = time.time()
-print(f"Time elapsed: {t1-t0} seconds")
+print(f"{num_pics} images loaded in: {t1-t0} seconds")
 
 plt.show()
 
