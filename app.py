@@ -58,8 +58,8 @@ def select_images():
     return jsonify({
         'imagesToTake': images_to_take.tolist(),  # Convert numpy array to list
         'totalImages': total_images,
-        'indexs': index_list.tolist(), # Convert numpy array to list
-        'similarities': similarity_list.tolist()  # Convert numpy array to list
+        'indexs': index_list,
+        'similarities': similarity_list
     })
 
 @app.route('/images_from_index')
