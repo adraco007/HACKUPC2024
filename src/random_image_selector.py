@@ -8,6 +8,9 @@ Output: array of zeros and ones, and total images in the folder
 import os
 import numpy as np
 
+# Set seed
+np.random.seed(42)
+
 class RandomImageSelector:
     def __init__(self, n_images):
         self.n_images = n_images
