@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Main menu</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./static/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="text-center mt-4">Image similarity finder</h1>
+      <p class="text-center">This is a basic Flask web application.</p>
+
+      <!-- Form for describing ideal cloth -->
+      <form>
+        <div class="mb-3">
+          <label for="idealClothInput" class="form-label">Describe your ideal cloth:</label>
+          <input type="text" class="form-control" id="idealClothInput" placeholder="Enter description">
+        </div>
+        <!-- Button to generate a piece -->
+        <button id="generatePieceButton" type="button" class="btn btn-primary mt-3">Generate Piece</button>
+        <!-- Button to generate an outfit -->
+        <button id="generateOutfitButton" type="button" class="btn btn-success mt-3">Generate Outfit</button>
+      </form>
+
+      <!-- Outfit image section, generated image will go here once generated -->
+      <img id="outfitImage" class="mt-3" src="" alt="Generated Outfit Image">
+
+      <a href="/" class="btn btn-secondary mt-3">Back to Menu</a>
+
+      <script src="./static/outfit.js"></script>
+
+    </div>
+  </body>
+</html>
