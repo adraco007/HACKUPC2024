@@ -4,16 +4,22 @@ from flask import request
 from flask import jsonify
 from flask import send_from_directory
 
-import openai_api.API_handler as api_handler
-import base64 # To encode the image
 app = Flask(__name__)
-
-# Set up OpenAI API
-api_handler.setup_openai()
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/process_uploaded_file', methods=['POST'])
+def process_uploaded_file():
+    # Get the uploaded file
+    uploaded_file = request.files['file']
+
+    # Save the file
+    uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
+
+    # No response needed, ok code only
+    return '', 200
 
 @app.route('/generate_image')
 def generate_image():
@@ -23,7 +29,6 @@ def generate_image():
     # Generate image
     print(f"Generating image with prompt: {prompt}")
     
-    image = api_handler.generate_response_image(prompt, quality='high')
 
     # No response needed, ok code only
     return '', 200
@@ -60,6 +65,11 @@ def serve_image(filename):
 def serve_generated_image(filename):
     return send_from_directory('data/generated_images', filename)
 
+# Route to the satic/blank.png image
+@app.route('/static/blank.png')
+def serve_blank_image():
+    return send_from_directory('static', 'blank.png')
+
 @app.route('/outfit')
 def outfit():
     return render_template('outfit.html')
@@ -67,6 +77,10 @@ def outfit():
 @app.route('/order')
 def order():
     return render_template('order.html')
+
+@app.route('/search')
+def search():
+    return render_template('search.html')
 
 
 if __name__ == '__main__':

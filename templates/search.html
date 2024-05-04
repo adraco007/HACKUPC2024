@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./static/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4">Find your product!</h1>
+        <p class="text-center">Here you can upload a photo of any kind of garment and see what is our most similar
+            product.</p>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Upload your file:</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="fileInput" name="file">
+                    <label class="custom-file-label" for="fileInput">Choose file</label>
+                </div>
+            </div>
+            <!-- Button to upload the file -->
+            <button id="uploadButton" type="button" class="btn btn-primary mt-3">Upload File</button>
+        </form>
+
+        <div class="image-container mt-3">
+            <!-- Uploaded image -->
+            <img id="uploadedImage" class="image-placeholder" src="/static/blank.png" alt="Uploaded Image" style="height: 300px; width: 300px; margin: auto;">
+            <!-- Generated outfit image -->
+            <img id="outfitImage" class="image-placeholder" src="/static/blank.png" alt="Generated Outfit Image" style="height: 300px; width: 300px; margin: auto;">
+        </div>
+        
+
+        <a href="/" class="btn btn-secondary mt-3">Back to Menu</a>
+
+
+
+    </div>
+    <script src="./static/search.js"></script>
+</body>
+
+</html>
