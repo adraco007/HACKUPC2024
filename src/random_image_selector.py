@@ -19,6 +19,3 @@ class RandomImageSelector:
         images_to_take[:self.n_images] = 1
         np.random.shuffle(images_to_take)
         return images_to_take, len(self.images_names)
-
-selector = RandomImageSelector(10)
-selector.select_images()

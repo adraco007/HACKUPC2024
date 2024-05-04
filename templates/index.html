@@ -17,15 +17,11 @@
             <label for="imageCountInput" class="form-label">Number of Images to Load:</label>
             <input type="number" class="form-control" id="imageCountInput" placeholder="Enter number of images">
         </div>
-        <div class="mb-3">
-            <label for="yearSlider" class="form-label">Select Year:</label>
-            <input type="range" class="form-range" id="yearSlider" min="2000" max="2025" step="1" value="2020">
-        </div>
-        <button type="submit" class="btn btn-success mt-3">Load Images</button>
+        <button id="load_images_button" type="submit" class="btn btn-success mt-3">Load Images</button>
       </form>
       
       <div class="mt-5">
-          <h2>Additional Information</h2>
+          <h2 id="info">Additional Information</h2>
           <p>This is some additional information.</p>
           <ul>
               <li>Item 1</li>
@@ -42,14 +38,21 @@
         <!-- Bar will be displayed here -->
       </div>
 
+
       <!-- Script to handle button click and update selection bar -->
       <script>
-        document.getElementById('checkSimilaritiesBtn').addEventListener('click', function() {
-          // Call random selector
-          fetch('/select_images')
+        document.getElementById('load_images_button').addEventListener('click', function() {
+          // Get the amount of images from the input field
+          let nImages = document.getElementById('imageCountInput').value;
+      
+          // Call random selector with the amount of images as a query parameter
+          fetch(`/select_images?n_images=${nImages}`)
             .then(response => response.json())
             .then(data => {
+            console.log(data);
               // Update selection bar
+              let textToDisplay = document.getElementById('info');
+                textToDisplay.innerHTML = `Selected ${data.imagesToTake.length} images`;
               let selectionBar = document.getElementById('selectionBar');
               selectionBar.innerHTML = ''; // Clear previous content
               data.imagesToTake.forEach(status => {
