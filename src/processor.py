@@ -28,10 +28,10 @@ class Processor:
         """
 
         embeddings = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=True, model_pathfile="./models/clip_model.pkl")
-        vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings,  vector_length=len(vector))
+        vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings,  vector_length=len(vector))
         #image = Image.open('data/generated_images/image1.png')
         print(vector_similaridades)
-        return vector_similaridades
+        return vector_indices, vector_similaridades
     
     def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = False, model_pathfile = "./models/clip_model.pkl"):
         """
