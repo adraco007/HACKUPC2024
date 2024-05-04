@@ -12,7 +12,7 @@ class ClipModel():
         self.device = "cpu"
         print("Loading CLIP model...")
         try:
-            self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+            self.model, self.preprocess = clip.load('ViT-B/16', device=self.device)
         except Exception as e:
             print(f"Error loading CLIP model: {e}")
             return None

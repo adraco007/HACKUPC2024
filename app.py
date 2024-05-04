@@ -51,7 +51,6 @@ def select_images():
         
     selector = RandomImageSelector(n_images)
     images_to_take, total_images = selector.select_images()
-    print("selected")
 
     index_list, similarity_list = processor.select_images(images_to_take)
     print("processed")
