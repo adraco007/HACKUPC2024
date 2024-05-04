@@ -38,7 +38,7 @@ class Processor:
         random.shuffle(random_vector)
         return random_vector
     
-    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = False, model_pathfile = None):
+    def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = True, model_pathfile = "./models/clip_model.pkl"):
         """
         Given a vector of images, return the embeddings of the images
         """
