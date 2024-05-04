@@ -33,10 +33,10 @@ document.getElementById('load_images_button').addEventListener('click', function
 
             let indexs = data.indexs; // Get the indexs of the images
             let similarities = data.similarities; // Get the similarities of the images
-
+            console.log("Indexs:", indexs); // Debug message
             let imageGrid = document.getElementById('imageGrid');
             imageGrid.innerHTML = ''; // Clear previous content
-
+            
             for (let i = 0; i < indexs.length; i++) {
                 console.log("Index:", indexs[i]); // Debug message
                 let img = document.createElement('img');
