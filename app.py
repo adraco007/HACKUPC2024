@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 from src.random_image_selector import RandomImageSelector
-from src.model_clip import ClipModel
 from src.processor import Processor
 from flask import request
 from flask import jsonify
