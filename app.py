@@ -21,6 +21,7 @@ def generate_image():
     prompt = request.args.get('prompt')
 
     # Generate image
+    print(f"Generating image with prompt: {prompt}")
     
     image = api_handler.generate_response_image(prompt, quality='high')
 
