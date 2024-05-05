@@ -97,7 +97,7 @@ for link in list_of_links:
 
 
 # Uso de la función
-save_list_to_csv(product_links, './data/product_links.csv')
+save_list_to_csv(product_links, './extraData/product_links.csv')
 '''
 
 
@@ -106,13 +106,13 @@ class LinksPhotoToProduct:
     def __init__(self):
         self.df = pd.DataFrame(columns=['photo_link', 'product_link'])
         self.image_links = self.extract_image_links_from_csv()
-        self.product_links = list(set(pd.read_csv('./data/product_links.csv')['data'].tolist()))
+        self.product_links = list(set(pd.read_csv('./extraData/product_links.csv')['data'].tolist()))
         self.product_dict = {link.split('-p0')[1].split('.html')[0]: link for link in self.product_links if '-p0' in link}
 
-    def extract_image_links_from_csv(self, csv_file='./data/inditextech_hackupc_challenge_images.csv'):
+    def extract_image_links_from_csv(self, csv_file='./extraData/inditextech_hackupc_challenge_images.csv'):
         df = pd.read_csv(csv_file)
         image_links = []
-        for filename in os.listdir('./data/images'):
+        for filename in os.listdir('./extraData/images'):
             if filename.endswith(".jpg") or filename.endswith(".png"):  # Asegúrate de que es una imagen
                 parts = filename[:-4].split('_')
                 i = int(parts[1])
@@ -136,7 +136,7 @@ class LinksPhotoToProduct:
             # Agregar una nueva fila al DataFrame
             self.df = self.df._append({'photo_link': str(photo), 'product_link': str(product_link)}, ignore_index=True)
 
-    def save_to_csv(self, csv_file='./data/links_photo_to_product.csv'):
+    def save_to_csv(self, csv_file='./extraData/links_photo_to_product.csv'):
         self.df.to_csv(csv_file, index=False)
 
 link_processor = LinksPhotoToProduct()
