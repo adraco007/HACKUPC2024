@@ -1,9 +1,9 @@
 #from PIL import Image
 import numpy as np
 import random
-from src.model_clip import ClipModel
-from src.embeds_visualizer_class import EmbedsVisualizer
-from src.clusterPrevi import ImageClassifier
+from model_clip import ClipModel
+from embeds_visualizer_class import EmbedsVisualizer
+from clusterPrevi import ImageClassifier
 import pickle
 import os
 import time
@@ -16,10 +16,8 @@ class Processor:
     def __init__(self):
         self.data = None
 
-    def find_outfit(self, vector, top_n=5):
-        selected_image_pathfile = "./data/uploaded_images"
-        # Get the image in that directory
-        selected_image_pathfile = os.path.join(selected_image_pathfile, os.listdir(selected_image_pathfile)[0])
+    def find_outfit(self, vector, top_n=6):
+        selected_image_pathfile="./data/uploaded_images/image_01.jpg"
         c = ClipModel()
         if None in vector:
             # Process the selected image to get its embedding
@@ -43,7 +41,7 @@ class Processor:
 
             # Convert filenames to numerical indices and return
             indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
-            return indices
+            return indices[1:]
             
 
     def select_images(self, vector):
@@ -114,3 +112,8 @@ class Processor:
         
 #Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
+t0 = time.time()
+p = Processor()
+top_indices = p.find_outfit(vector=[None])
+print("Indices of top similar images:", top_indices)
+print("Time taken:", time.time()-t0)
