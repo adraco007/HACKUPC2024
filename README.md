@@ -1,47 +1,30 @@
 # HACKUPC2024
 
-data_base: https://drive.google.com/file/d/1OaIzEt20LQk1ixO5UFx7wvOTZef3PKww/view?pli=1
+## Inspiration
+As students of the artificial intelligence degree (from UPC), we have obviously been influenced by all the knowledge gained in the last months, where we have started to deal with neural networks, among other things. That's why we started with this challenge, as it served us to practice what we had learnt in class.
 
-liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?59D31687B3449869D06577115946691FE2DF
+## What it does
+We have implemented a web, which has two uses: to find the most similar images given a set of them. And, on the other hand, given an image of a piece of clothing (by photo or generated with AI), to obtain the most similar existing images (in the shop). All this works with pre-trained models of convolutional neural networks.
 
-Image Computing for an Ecommerce
-Given a dataset of garment images from various angles, the challenge is to develop an algorithm that identifies 
-duplicated or very similar images not belonging to the same set (each set consists of three consecutive photos). 
-This involves comparing colors, features, and bitmaps.
+## How we built it
+We have used convolutional neural networks to obtain similarities between images. Moreover, we treated the links of the images provided in the csv to classify the images into Season, ProductType and Section classes. In this way, we reduce the search space for similar images, making it more optimal.
+For the web (backend), we worked with Flask. The aim of the web was to be able to visualise the results of the model more easily, as well as to see possible real applications. To achieve this, we added some extra aspects to the work. For example, we can enter images as a file (after having taken a photo, for example), but we also have a generative AI of open source clothes; and from these we can search for similar ones. In addition, we have scraped the Zara website to get the links to all the current Zara products. We do this so that, when we get a similar photo, by clicking on it we can go directly to the product on the official website (we can do this because the links of the images and the products share a certain numerical code).
 
-The task is computationally intensive, requiring over 8 billion computations due to the combinatorial complexity of 
-image comparisons in three dimensions.
-
-The algorithm's accuracy and speed will be key evaluation criteria. Advanced teams may use provided photos to create
- a website showcasing their work. Senior teams could infer garment details (year, season, indicators) from generated
-  URLs.
-  
---------------------------------------------------------------------------------------------------------------------
-Autoencoder Explicado
+## Challenges we ran into
+- Coordinating frontend and backend
+- Creating a good model to obtain the embeddings and finding similarities between pieces of cloth
+- Dealing with the high computational and spatial cost
 
 
+## Accomplishments that we're proud of
+- Creating the model
+- Getting a good interface
+- Being able to find real products from an image of a similar product 
 
-  Entrada de la imagen:
-      La entrada de la imagen tiene una forma definida por las dimensiones de la imagen de entrada. En este caso, se asume que las imágenes son de tamaño 224x224 píxeles y tienen 3 canales de color (RGB), por lo que la forma de la entrada es (224, 224, 3).
-
-  Encoder:
-      El encoder consta de varias capas convolucionales y de pooling que reducen la dimensionalidad de la imagen de entrada. En este autoencoder, se aplican capas de convolución seguidas de capas de pooling para extraer características de la imagen. La reducción de dimensionalidad se realiza mediante el uso de capas de pooling, que reducen el tamaño espacial de la imagen y el número de canales de características.
-      La forma de salida del encoder, antes del cuello de botella, es determinada por la última capa de pooling, que en este caso es (28, 28, 8), donde 8 es el número de canales de características.
-
-  Cuello de botella (Bottleneck):
-      El cuello de botella es una capa densa que contiene los embeddings de las características más importantes de la imagen. En este autoencoder, se usa una capa densa con 128 neuronas para capturar estas características. La forma de salida del cuello de botella es (128,), ya que es un vector de características de longitud 128.
-
-  Decoder:
-      El decoder es responsable de reconstruir la imagen original a partir de los embeddings en el cuello de botella. En este autoencoder, el decoder consta de capas densas y capas de convolución transpuestas (up-sampling) que aumentan la dimensionalidad de las características.
-      La forma de salida del decoder es la misma que la forma de entrada de la imagen original, es decir, (224, 224, 3), ya que el objetivo es reconstruir una imagen RGB de tamaño 224x224 píxeles.
+## What we learned
+- Use of convolutional neural networks
+- Dealing with embeddings
 
 
-
-
-
---------------------------------------------------------------------------------------------------------------------
-File Hierarchy:
-
-- ./data: contains the data used for both preprocessing, training and validating the different models
-- ./models: contains different binaries with the trained models
-- ./src: scripts
+## What's next for PifIA's DLC
+- Applying the knowledge obtained to ohter academic uses
