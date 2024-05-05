@@ -15,6 +15,7 @@ Communication between the GUI and the backend
 class Processor:
     def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model.pkl'):
         self.data = None
+        
         if load_model:
             self.c = pickle.load(open(model_pathfile, 'rb'))
         else:
@@ -26,9 +27,13 @@ class Processor:
 
 
     def find_outfit(self, vector, top_n=6):
-        selected_image_pathfile="./data/uploaded_images/image_01.jpg"
-        c = ClipModel()
-        if None in vector:
+        #from data/generated_images/ take the name
+        names = os.listdir('./data/uploaded_images/')
+        name = names[0]
+        selected_image_pathfile = './data/uploaded_images/' + name
+        if not self.c.downloaded:
+            self.c.download(offline=True)
+        if True:
             # Process the selected image to get its embedding
             embedding_selected_image = self.c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
@@ -36,8 +41,8 @@ class Processor:
 
             # Remove the embedding of the selected image from the dictionary to avoid self-comparison
             selected_filename = os.path.basename(selected_image_pathfile)
-            selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
-            del self.embeddings[selected_embedding_key]
+            #selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
+            #del self.embeddings[selected_embedding_key]
 
             # Compute cosine similarities
             similarities = {}
@@ -46,12 +51,12 @@ class Processor:
                 similarities[key] = sim
 
             # Sort by similarity and select top N
-            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
-
+            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[1:top_n]
+            print("aaaaaaa", len(self.embeddings))
             # Convert filenames to numerical indices and return
             indices = []
             for key in sorted_keys:
-                indices.append(self.index_dict)
+                indices.append(self.index_dict[key])
             return indices
             
 
@@ -136,7 +141,12 @@ class Processor:
         Get the vectors of the canta rero
         """
         ImageClassifier().load_data()
-        pass    
+        pass 
+
+
+
+
+#ClipModel(download=True)   
 """
 
 proc = Processor()
