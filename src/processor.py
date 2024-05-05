@@ -90,7 +90,7 @@ class Processor:
             selected_image_embedding = model.process_select_image(image_path=selected_image_pathfile)
             return embeddings, selected_image_embedding
         else:
-            return embeddings
+            return embeddings, indexes
     
     def cosine_similarity(self,vec1, vec2):
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))

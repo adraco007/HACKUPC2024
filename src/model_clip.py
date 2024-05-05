@@ -43,7 +43,7 @@ class ClipModel():
             embedding_filepath = os.path.join(embeddings_folder, embedding_filename)
             
             # Guardar el embedding en un archivo
-            torch.save(image_features, embedding_filepath)
+            torch.save(image_features[0], embedding_filepath)
         end_time = time.time() # Timer
         print("Embeddings generated and saved for all images.")
 
@@ -77,8 +77,11 @@ class ClipModel():
             # Guardar el embedding en un archivo
             torch.save(image_features, embedding_filepath)
             embeddings[image_file] = (image_features, idx)
-
-        return embeddings
+            embeddings[image_file] = image_features[0]
+            indexes[image_file] = idx[0]
+            print(image_features[0].shape)
+            print(embeddings[image_file].shape)
+        return embeddings, indexes
 
     def load_embeddings(self, embeddings_folder='./data/embeddings/'):
         # Cargar los embeddings de las imágenes
@@ -88,12 +91,6 @@ class ClipModel():
             embedding = torch.load(embedding_filepath)
             embeddings[embedding_file] = embedding
         return embeddings
-    
-            embeddings[image_file] = image_features[0]
-            indexes[image_file] = idx[0]
-        print(image_features[0].shape)
-        print(embeddings[image_file].shape)
-        return embeddings, indexes
     
 
     def process_select_image(self, image_path: str, embedding_path='./data/embeddings_test/'):
