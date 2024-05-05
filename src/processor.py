@@ -1,9 +1,9 @@
 #from PIL import Image
 import numpy as np
 import random
-from model_clip import ClipModel
-from embeds_visualizer_class import EmbedsVisualizer
-from clusterPrevi import ImageClassifier
+from src.model_clip import ClipModel
+from src.embeds_visualizer_class import EmbedsVisualizer
+from src.clusterPrevi import ImageClassifier
 import pickle
 import os
 import time
