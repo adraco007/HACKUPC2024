@@ -1,1 +1,10 @@
 Flask==2.1.0
+pickle
+numpy
+pandas
+clip
+torch
+PIL
+matplotlib
+urllib
+sklearn

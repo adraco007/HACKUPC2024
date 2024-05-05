@@ -1,13 +1,9 @@
 import time
-import torch
-import clip
 import os
-from PIL import Image
 from torch.nn.functional import cosine_similarity
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
-
 
 class EmbedsVisualizer:
     def __init__(self, device="cpu"):
