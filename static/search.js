@@ -7,6 +7,8 @@ let rightPhoto = document.getElementById('outfitImage');
 // Take the rectangle that works as the visual indicator
 let rectangle = document.getElementById('visual_indicator');
 
+let goToGradio = document.getElementById('goToGradio');
+
 // Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
@@ -157,3 +159,9 @@ rightPhoto.addEventListener('click', function () {
         window.open(urls_to_shop[index]);
     }
 });
+
+// Add a listener to the rectangle to open the link to goToGradio
+goToGradio.addEventListener('click', function () {
+    window.open('https://a7d92eb8a3b6a421dc.gradio.live/');
+}
+);

@@ -9,11 +9,29 @@ import pickle
 class ClipModel():
     def __init__(self, download = False):
         self.device = "cpu"
+        self.downloaded = download
+        self.preprocess = None
+        self.model = None
         if download:
             self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+            with open('./models/preprocess.pkl', 'wb') as f:
+                pickle.dump(self.preprocess, f)
+            with open('./models/clip_model_.pkl', 'wb') as f:
+                pickle.dump(self.model, f)
+    
         self.embeddings_folder = './data/embeddings/'
         if not os.path.exists(self.embeddings_folder):
             os.makedirs(self.embeddings_folder)
+
+    def download(self, offline = False):
+        if offline:
+            with open('./models/preprocess.pkl', 'rb') as f:
+                self.preprocess= pickle.load(f)
+            with open('./models/clip_model_.pkl', 'rb') as f:
+                self.model = pickle.load(f)
+        else:
+            self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+        
 
     def _process_image(self, image_path):
         # Función para cargar y procesar una imagen
@@ -111,7 +129,7 @@ class ClipModel():
         self.list_dirs_img.sort()
         
         embedding_dict = {}
-        for index in range(len(self.list_dirs_emb)):
+        for index in range(len(self.list_dirs_img)):
             embedding_dict[self.list_dirs_img[index]] = index
             embedding_filepath = os.path.join(embeddings_folder, self.list_dirs_emb[index])
             embedding = torch.load(embedding_filepath)
@@ -164,7 +182,7 @@ class ClipModel():
         embedding_filepath = os.path.join(embedding_path, embedding_filename)
 
         # Guardar el embedding en un archivo
-        torch.save(image_features, embedding_filepath)
+        #torch.save(image_features, embedding_filepath)
         embedding = image_features[0]
 
         return embedding
@@ -174,12 +192,17 @@ class ClipModel():
             # Guardar la instancia de la clase utilizando pickle
             with open(file_path, 'wb') as f:
                 pickle.dump(self, f)
+            with open('./models/preprocess.pkl', 'wb') as f:
+                pickle.dump(self.preprocess, f)
+            with open('./models/clip_model_.pkl', 'wb') as f:
+                pickle.dump(self.model, f)
             print(f"Modelo guardado como archivo binario en: {file_path}")
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
 
-"""model = ClipModel()
-model.save_self()"""
+model = ClipModel(download=True)
+model.process_images()
+model.save_self()
 
 """
 start_time = time.time()
