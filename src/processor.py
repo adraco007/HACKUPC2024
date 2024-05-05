@@ -49,9 +49,9 @@ class Processor:
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
         print("Processing images")
-        embeddings = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=False, model_pathfile="./models/clip_model.pkl")
+        embeddings, indexes = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=True, model_pathfile="./models/clip_model.pkl")
         print("Embeddings processed")
-        vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings,  vector_length=len(vector))
+        vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings, indexes=indexes,  vector_length=len(vector))
         #image = Image.open('data/generated_images/image1.png')
         print(vector_similaridades)
         return vector_indices, vector_similaridades
@@ -101,10 +101,10 @@ class Processor:
         """
         ImageClassifier().load_data()
         pass    
-        
-Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+
+proc = Processor()
+proc.select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+proc.select_images(          [0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
 
-p = Processor()
-p.find_outfit(selected_image_pathfile = "./data/uploaded/image_1.jpg", vector=None)
 
