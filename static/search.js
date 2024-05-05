@@ -2,6 +2,9 @@
 let prevButton = document.getElementById('prevButton');
 let nextButton = document.getElementById('nextButton');
 
+// Take the rectangle that works as the visual indicator
+let rectangle = document.getElementById('visual_indicator');
+
 // Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
@@ -77,6 +80,13 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                 let rightPhoto = document.getElementById('outfitImage');
                 rightPhoto.src = actual_url;
 
+                // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+                if (urls_to_shop[0] !== NaN) {
+                    rectangle.style.backgroundColor = 'green';
+                } else {
+                    rectangle.style.backgroundColor = 'gray';
+                }
+
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -111,6 +121,13 @@ nextButton.addEventListener('click', function (event) {
         actual_url = urls[index + 1];
         let rightPhoto = document.getElementById('outfitImage');
         rightPhoto.src = actual_url;
+
+        // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+        if (urls_to_shop[index + 1] !== NaN) {
+            rectangle.style.backgroundColor = 'green';
+        } else {
+            rectangle.style.backgroundColor = 'gray';
+        }
     }
 });
 
@@ -122,5 +139,13 @@ prevButton.addEventListener('click', function (event) {
         actual_url = urls[index - 1];
         let rightPhoto = document.getElementById('outfitImage');
         rightPhoto.src = actual_url;
+
+        // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+        if (urls_to_shop[index - 1] !== NaN) {
+            rectangle.style.backgroundColor = 'green';
+        } else {
+            rectangle.style.backgroundColor = 'gray';
+        }
     }
 });
+
