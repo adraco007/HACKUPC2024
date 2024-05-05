@@ -53,6 +53,11 @@ body {
     align-items: center;
     margin-top: 20px;
 }
+.rectangle {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px; /* Adjust this value as needed */
+}
 
 /* Style for the select elements */
 .form-select {
