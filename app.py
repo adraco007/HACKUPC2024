@@ -132,6 +132,41 @@ def order():
 def search():
     return render_template('search.html')
 
+@app.route('get_image_link')
+def get_image_link():
+    try:
+        index = int(request.args.get('index'))  # Convert to int
+        print("Index parsed correctly")
+    except:
+        print("Error: index is not an integer")
+        index = 0
+    names = os.listdir('data/images')
+    names.sort()
+    name = names[index]
+    # format: img_x_y.jpg -> (x, y)
+    x = int(name.split('_')[1])
+    y = int(name.split('_')[2].split('.')[0])
+
+    # Check in data\inditextech_hackupc_challenge_images.csv for the link in that position
+    with open('data/inditextech_hackupc_challenge_images.csv', 'r') as f:
+        lines = f.readlines()
+        link = lines[x+1].split(',')[y-1]
+
+    product_link = None
+
+    # Check if link exists in extraData\links_photo_to_product.csv
+    with open('data/extraData/links_photo_to_product.csv', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            if link in line:
+                product_link = line.split(',')[1]
+                print(f"Link: {link}")
+                break
+
+    return jsonify({
+        'link': product_link
+    })
+
 
 if __name__ == '__main__':
     app.run(debug=True)
