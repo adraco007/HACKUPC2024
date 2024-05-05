@@ -25,16 +25,10 @@ class Processor:
         self.embeddings, self.index_dict = self.c.load_embeddings(embeddings_folder='./data/embeddings/')
 
 
-<<<<<<< HEAD
-    def find_outfit(self, selected_image_pathfile, vector, top_n=5):
-        
-        if vector is None:
-=======
     def find_outfit(self, vector, top_n=6):
         selected_image_pathfile="./data/uploaded_images/image_01.jpg"
         c = ClipModel()
         if None in vector:
->>>>>>> 63053d795e002a13e50a27b27a65a2d31db34a04
             # Process the selected image to get its embedding
             embedding_selected_image = self.c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
@@ -55,15 +49,10 @@ class Processor:
             sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
 
             # Convert filenames to numerical indices and return
-<<<<<<< HEAD
             indices = []
             for key in sorted_keys:
                 indices.append(self.index_dict)
             return indices
-=======
-            indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
-            return indices[1:]
->>>>>>> 63053d795e002a13e50a27b27a65a2d31db34a04
             
 
     def select_images(self, vector):
