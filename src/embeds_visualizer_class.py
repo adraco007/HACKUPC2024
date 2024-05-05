@@ -135,7 +135,7 @@ class EmbedsVisualizer:
                             next_filename = filenames[j]
             # Agregar la imagen con máxima similitud al diccionario
             max_similarities[next_filename] = max_similarity
-            indx_vector_general = embeddings[filenames[next_idx]][1]
+            indx_vector_general = embeddings[filenames[next_idx]][0]
 
             vector_indices.append(indx_vector_general[0])
             similarity_list[return_similarity_array_index] = max_similarity[0]
