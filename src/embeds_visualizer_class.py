@@ -105,8 +105,8 @@ class EmbedsVisualizer:
         max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
         max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
 
-        vector_indices.append(embeddings[filenames[row_idx]][0][0])
-        vector_indices.append(embeddings[filenames[col_idx]][0][0])
+        vector_indices.append(embeddings[filenames[row_idx]][1][0])
+        vector_indices.append(embeddings[filenames[col_idx]][1][0])
 
         return_similarity_array_index=0
         similarity_list[return_similarity_array_index] = similarity_matrix[row_idx, col_idx]
@@ -135,7 +135,7 @@ class EmbedsVisualizer:
                             next_filename = filenames[j]
             # Agregar la imagen con máxima similitud al diccionario
             max_similarities[next_filename] = max_similarity
-            indx_vector_general = embeddings[filenames[next_idx]][0]
+            indx_vector_general = embeddings[filenames[next_idx]][1]
 
             vector_indices.append(indx_vector_general[0])
             similarity_list[return_similarity_array_index] = max_similarity[0]
