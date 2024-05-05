@@ -1,9 +1,9 @@
 #from PIL import Image
 import numpy as np
 import random
-from src.model_clip import ClipModel
-from src.embeds_visualizer_class import EmbedsVisualizer
-from src.clusterPrevi import ImageClassifier
+from model_clip import ClipModel
+from embeds_visualizer_class import EmbedsVisualizer
+from clusterPrevi import ImageClassifier
 import pickle
 import os
 import time
@@ -16,32 +16,29 @@ class Processor:
     def __init__(self):
         self.data = None
 
-    def find_outfit(self, vector, top_n=6):
-        selected_image_pathfile="./data/uploaded_images/image_01.jpg"
+    def find_outfit(self, vector, top_n=5):
+        
+        selected_image_pathfile="./data/uploaded_images/pablo.jpg"
         c = ClipModel()
-        if None in vector:
+        if True:
+            
             # Process the selected image to get its embedding
             embedding_selected_image = c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
             embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
-
-            # Remove the embedding of the selected image from the dictionary to avoid self-comparison
-            selected_filename = os.path.basename(selected_image_pathfile)
-            selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
-            embeddings.pop(selected_embedding_key, None)
-
+            
             # Compute cosine similarities
             similarities = {}
             for key, embedding in embeddings.items():
                 sim = self.cosine_similarity(embedding_selected_image, embedding)
                 similarities[key] = sim
-
+            
             # Sort by similarity and select top N
             sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
-
+            
             # Convert filenames to numerical indices and return
             indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
-            return indices[1:]
+            return indices
             
 
     def select_images(self, vector):
@@ -108,8 +105,9 @@ class Processor:
         """
         Get the vectors of the canta rero
         """
-        ImageClassifier().load_data()
-        pass    
+        canta = ImageClassifier()
+        canta.run()
+        
         
 #Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
@@ -118,3 +116,6 @@ p = Processor()
 top_indices = p.find_outfit(vector=[None])
 print("Indices of top similar images:", top_indices)
 print("Time taken:", time.time()-t0)"""
+
+p = Processor()
+p.find_outfit(vector=[None])

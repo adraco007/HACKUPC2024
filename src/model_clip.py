@@ -108,7 +108,7 @@ class ClipModel():
         embedding_filepath = os.path.join(embedding_path, embedding_filename)
 
         # Guardar el embedding en un archivo
-        torch.save(image_features, embedding_filepath)
+        #torch.save(image_features, embedding_filepath)
         embedding = image_features[0]
 
         return embedding
