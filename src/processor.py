@@ -1,9 +1,9 @@
 #from PIL import Image
 import numpy as np
 import random
-from src.model_clip import ClipModel
-from src.embeds_visualizer_class import EmbedsVisualizer
-from src.clusterPrevi import ImageClassifier
+from model_clip import ClipModel
+from embeds_visualizer_class import EmbedsVisualizer
+from clusterPrevi import ImageClassifier
 import pickle
 
 """
@@ -14,12 +14,31 @@ class Processor:
     def __init__(self):
         self.data = None
 
-    def find_outfit(self, vector):
+    def find_outfit(self, selected_image_pathfile, vector, top_n=5):
+        c = ClipModel()
         """
         Given an image, give back the x most similar images from the database
         """
         # Placeholder: 
-        pass 
+        if vector == None:
+            embedding_selected_image = c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
+            # Compute the simmularity with all the embeddings
+            # First we load the embeddings
+            embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
+            # Then we compute the similarity with the cosine similarity
+            # We return the top 5 most similar images
+            similarities = {}
+    
+            # Calcular la similaridad del coseno entre el vector dado y cada embedding en el diccionario
+            for key, embedding in embeddings.items():
+                sim = self.cosine_similarity(embedding_selected_image, embedding)
+                similarities[key] = sim
+            
+            # Ordenar las similaridades y obtener las top_n claves
+            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
+            print(sorted_keys)
+            return sorted_keys
+            
 
     def select_images(self, vector):
         """
@@ -48,9 +67,13 @@ class Processor:
             return embeddings, selected_image_embedding
         else:
             return embeddings
+    
+    def cosine_similarity(self,vec1, vec2):
+        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
         
 #Processor().select_images([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
 
-
+p = Processor()
+p.find_outfit(selected_image_pathfile = "./data/uploaded/image_1.jpg", vector=None)
 

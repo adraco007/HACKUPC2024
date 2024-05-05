@@ -78,6 +78,15 @@ class ClipModel():
             embeddings[image_file] = (image_features, idx)
 
         return embeddings
+
+    def load_embeddings(self, embeddings_folder='./data/embeddings/'):
+        # Cargar los embeddings de las imágenes
+        embeddings = {}
+        for embedding_file in os.listdir(embeddings_folder):
+            embedding_filepath = os.path.join(embeddings_folder, embedding_file)
+            embedding = torch.load(embedding_filepath)
+            embeddings[embedding_file] = embedding
+        return embeddings
     
 
     def process_select_image(self, image_path: str, embedding_path='./data/embeddings_test/'):
@@ -108,7 +117,6 @@ class ClipModel():
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
         
-
 
 
 """model = ClipModel()
