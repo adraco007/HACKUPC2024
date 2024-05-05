@@ -15,7 +15,7 @@ document.getElementById('load_images_button').addEventListener('click', function
             console.log("Response received:", data); // Debug message
 
             // Update selection bar
-            let selectionBar = document.getElementById('selectionBar');
+            /*let selectionBar = document.getElementById('selectionBar');
             selectionBar.innerHTML = ''; // Clear previous content
             selectionBar.style.margin = '0'; // Set margin to zero
             selectionBar.style.padding = '0'; // Set padding to zero
@@ -29,25 +29,19 @@ document.getElementById('load_images_button').addEventListener('click', function
                 div.style.margin = '0'; // Remove any margin
                 div.style.padding = '0'; // Remove any padding
                 selectionBar.appendChild(div);
-            });
+            });*/
 
-            let images_vector = data.similarityVector;
-
-            // Get all the indexs where the value is not 0
-            let indexes = [];
-            for (let i = 0; i < images_vector.length; i++) {
-                if (images_vector[i] !== 0) {
-                    indexes.push(i);
-                }
-            }
-
+            let indexs = data.indexs; // Get the indexs of the images
+            let similarities = data.similarities; // Get the similarities of the images
+            console.log("Indexs:", indexs); // Debug message
             let imageGrid = document.getElementById('imageGrid');
             imageGrid.innerHTML = ''; // Clear previous content
-
-            for (let i = 0; i < indexes.length; i++) {
+            
+            for (let i = 0; i < indexs.length; i++) {
+                console.log("Index:", indexs[i]); // Debug message
                 let img = document.createElement('img');
                 // Use the images_from_index endpoint to get the image
-                img.src = `/images_from_index?index=${indexes[i]}`;
+                img.src = `/images_from_index?index=${indexs[i]}`;
                 img.style.width = '100px'; // Adjust width as needed
                 img.style.height = '100px'; // Adjust height as needed
                 img.style.margin = '5px'; // Add some margin between images

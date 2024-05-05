@@ -24,8 +24,6 @@ def download_images_dup(df_row, index):
         if pd.notnull(path):
             download_image(path, f'./data/images/img_{index}_{i+1}.jpg')
 
-
-
 def main(num_pictures, duplicated):
     df = pd.read_csv('./data/inditextech_hackupc_challenge_images.csv')
     df = df.iloc[:,0]
@@ -40,7 +38,7 @@ def main(num_pictures, duplicated):
 
 if __name__ == "__main__":
     #Parameters
-    num_pictures = 30000
+    num_pictures = 400
     duplicated = False
 
 
