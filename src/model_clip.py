@@ -43,7 +43,7 @@ class ClipModel():
             embedding_filepath = os.path.join(embeddings_folder, embedding_filename)
             
             # Guardar el embedding en un archivo
-            torch.save(image_features, embedding_filepath)
+            torch.save(image_features[0], embedding_filepath)
         end_time = time.time() # Timer
         print("Embeddings generated and saved for all images.")
 
@@ -58,6 +58,7 @@ class ClipModel():
 
         # Lista de embeddings
         embeddings = {}
+        indexes = {}
 
         for idx in np.argwhere(vector_images == 1):
   
@@ -72,11 +73,23 @@ class ClipModel():
             base_filename = os.path.basename(image_filepath)
             embedding_filename = os.path.splitext(base_filename)[0] + '.pt'
             embedding_filepath = os.path.join(embedding_path, embedding_filename)
-
+        
             # Guardar el embedding en un archivo
             torch.save(image_features, embedding_filepath)
-            embeddings[image_file] = image_features
+            embeddings[image_file] = (image_features, idx)
+            embeddings[image_file] = image_features[0]
+            indexes[image_file] = idx[0]
+        print(image_features[0].shape)
+        print(embeddings[image_file].shape)
+        return embeddings, indexes
 
+    def load_embeddings(self, embeddings_folder='./data/embeddings/'):
+        # Cargar los embeddings de las imágenes
+        embeddings = {}
+        for embedding_file in os.listdir(embeddings_folder):
+            embedding_filepath = os.path.join(embeddings_folder, embedding_file)
+            embedding = torch.load(embedding_filepath)
+            embeddings[embedding_file] = embedding
         return embeddings
     
 
@@ -108,8 +121,8 @@ class ClipModel():
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
         
-
-
+c = ClipModel()
+c.process_images()
 
 """model = ClipModel()
 model.save_self()"""

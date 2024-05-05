@@ -150,6 +150,71 @@ class EmbedsVisualizer:
         return vector_indices, similarity_list
 
 
+    def get_max_similarity_optimized(self, embeddings: dict, indexes: dict, num_images=4):
+        assert num_images >= 2
+        
+        num_embeddings = len(embeddings.keys())
+        filenames = sorted(embeddings.keys())
+        
+        # Obtener todos los embeddings en una matriz
+        embedding_matrix = np.array([embeddings[name].squeeze().unsqueeze(0)[0] for name in filenames])
+        print(embedding_matrix.shape)
+        # Calcular todas las similitudes de una vez
+        similarity_matrix = np.dot(embedding_matrix, embedding_matrix.T)
+        
+        # Configurar las similitudes entre pares de la misma imagen a cero
+        np.fill_diagonal(similarity_matrix, 0)
+        
+        # Diccionario para almacenar las imágenes con su similitud correspondiente
+        max_similarities = {}
+        vector_indices = []
+        similarity_list = np.zeros(num_images)
+        
+        # Encontrar los primeros dos elementos con máxima similitud
+        idx_max = np.argmax(similarity_matrix)
+        row_idx, col_idx = np.unravel_index(idx_max, similarity_matrix.shape)
+        max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
+        max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
+        
+        print(vector_indices)
+        print(filenames)
+        print(indexes)
+        print(row_idx)
+        vector_indices.extend(indexes[filenames[row_idx]])
+        vector_indices.extend(indexes[filenames[col_idx]])
+        
+        similarity_list[:2] = similarity_matrix[row_idx, col_idx]
+        
+        # Configurar las similitudes a cero para los elementos ya encontrados
+        similarity_matrix[row_idx, :] = 0
+        similarity_matrix[:, row_idx] = 0
+        similarity_matrix[col_idx, :] = 0
+        similarity_matrix[:, col_idx] = 0
+
+        # Matriz de similitudes temporal para encontrar los siguientes elementos
+        temporal_similarity_matrix = similarity_matrix[[row_idx, col_idx],:]
+        next_idx = np.unravel_index(np.argpartition(temporal_similarity_matrix, -2), temporal_similarity_matrix.shape)[-2:]
+        print(next_idx)
+        """# Continuar encontrando los siguientes índices con máxima similitud iterativamente
+        for i in range(2, num_images):
+            # Encontrar el máximo en la matriz de similitudes
+            next_idx = np.unravel_index(np.argmax(similarity_matrix), similarity_matrix.shape)[0]
+            max_similarity = np.max(similarity_matrix)
+            
+            # Agregar la imagen con máxima similitud al diccionario
+            max_similarities[filenames[next_idx]] = (max_similarity, filenames[next_idx])
+            
+            # Agregar los índices de vector
+            vector_indices.extend(embeddings[filenames[next_idx]][1][0])
+            
+            # Agregar la similitud a la lista
+            similarity_list[i] = max_similarity
+            
+            # Configurar las similitudes a cero para el nuevo elemento encontrado
+            similarity_matrix[next_idx, :] = 0
+            similarity_matrix[:, next_idx] = 0
+        
+        return vector_indices, similarity_list"""
 
 
         
