@@ -121,7 +121,8 @@ class ClipModel():
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
         
-
+c = ClipModel()
+c.process_images()
 
 """model = ClipModel()
 model.save_self()"""
