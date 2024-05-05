@@ -79,8 +79,8 @@ class ClipModel():
             embeddings[image_file] = (image_features, idx)
             embeddings[image_file] = image_features[0]
             indexes[image_file] = idx[0]
-            print(image_features[0].shape)
-            print(embeddings[image_file].shape)
+        print(image_features[0].shape)
+        print(embeddings[image_file].shape)
         return embeddings, indexes
 
     def load_embeddings(self, embeddings_folder='./data/embeddings/'):
