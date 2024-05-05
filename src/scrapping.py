@@ -31,13 +31,6 @@ class ZaraScraper:
             product_link = product.get_attribute('href')
             product_links.append(product_link)
 
-    def get_product_ids(self, product_links, product_ids):
-        for product in product_links:
-            match = re.search(r'p0(\d+)\.html', product)
-            if match:
-                product_id = match.group(1)
-                product_ids.append(product_id)
-
 
 list_of_links = [
     "https://www.zara.com/es/es/mujer-blazers-l1055.html?v1=2352684&regionGroupId=105",
@@ -101,60 +94,51 @@ for link in list_of_links:
     scraper = ZaraScraper(link)
     scraper.scroll_page()
     scraper.get_product_links(product_links)
-    scraper.get_product_ids(product_links, product_ids)
 
 
 # Uso de la función
 save_list_to_csv(product_links, './data/product_links.csv')
-save_list_to_csv(product_ids, './data/product_ids.csv')
 '''
 
 
-def extract_image_links_from_csv(csv_file='./data/inditextech_hackupc_challenge_images.csv'):
-    df = pd.read_csv(csv_file)
-    image_links = []
-    for filename in os.listdir('./data/images'):
-        if filename.endswith(".jpg") or filename.endswith(".png"):  # Asegúrate de que es una imagen
-            parts = filename[:-4].split('_')
-            i = int(parts[1])
-            j = int(parts[2]) - 1
-            if i < len(df) and j < len(df.columns):
-                url = df.iloc[i, j]
-                image_links.append(url)
-    return image_links
 
-# Uso de la función
-image_links = extract_image_links_from_csv()
-#print(image_links)
-save_list_to_csv(image_links, './data/image_links.csv')
+class LinksPhotoToProduct:
+    def __init__(self):
+        self.df = pd.DataFrame(columns=['photo_link', 'product_link'])
+        self.image_links = self.extract_image_links_from_csv()
+        self.product_links = list(set(pd.read_csv('./data/product_links.csv')['data'].tolist()))
+        self.product_dict = {link.split('-p0')[1].split('.html')[0]: link for link in self.product_links if '-p0' in link}
 
+    def extract_image_links_from_csv(self, csv_file='./data/inditextech_hackupc_challenge_images.csv'):
+        df = pd.read_csv(csv_file)
+        image_links = []
+        for filename in os.listdir('./data/images'):
+            if filename.endswith(".jpg") or filename.endswith(".png"):  # Asegúrate de que es una imagen
+                parts = filename[:-4].split('_')
+                i = int(parts[1])
+                j = int(parts[2]) - 1
+                if i < len(df) and j < len(df.columns):
+                    url = df.iloc[i, j]
+                    image_links.append(url)
+        return image_links
 
+    def link_photo_product(self):
+        for photo in self.image_links:
+            #print('Processing photo')
+            parts = photo.split('/')
+            result = parts[11] + parts[12]
+            #print(result)
 
-# Cargar los datos desde los archivos CSV
-product_links = pd.read_csv('./data/product_links.csv')['data'].tolist()
-product_ids = pd.read_csv('./data/product_ids.csv')['data'].tolist()
+            # Buscar el product_link correspondiente en el diccionario
+            product_link = self.product_dict.get(result, np.nan)
+            print(f'Product id: {result}, Product link: {product_link}')
 
-# Crear un DataFrame vacío para la nueva base de datos
-df = pd.DataFrame(columns=['photo_link', 'product_link'])
+            # Agregar una nueva fila al DataFrame
+            self.df = self.df._append({'photo_link': str(photo), 'product_link': str(product_link)}, ignore_index=True)
 
-# Crear un diccionario con product_ids como claves y product_links como valores
-product_dict = {product_id: product_link for product_id, product_link in zip(product_ids, product_links)}
+    def save_to_csv(self, csv_file='./data/links_photo_to_product.csv'):
+        self.df.to_csv(csv_file, index=False)
 
-
-# Para cada photo en image_links
-for photo in image_links:
-    print('Processing photo')
-    parts = photo.split('/')
-    result = parts[11] + parts[12]
-    print(result)
-
-    # Buscar el product_link correspondiente en el diccionario
-    product_link = product_dict.get(result, np.nan)
-    print(f'Product id: {result}, Product link: {product_link}')
-
-    # Agregar una nueva fila al DataFrame
-    df = df._append({'photo_link': str(photo), 'product_link': str(product_link)}, ignore_index=True)
-
-# Guardar el DataFrame en un archivo CSV
-df.to_csv('./data/links_photo_to_product.csv', index=False)
-
+link_processor = LinksPhotoToProduct()
+link_processor.link_photo_product()
+link_processor.save_to_csv()
