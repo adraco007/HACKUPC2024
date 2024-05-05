@@ -8,17 +8,9 @@ import pickle
 
 class ClipModel():
     def __init__(self):
-        print("Loading CLIP model...")
         self.device = "cpu"
-        print("Loading CLIP model...")
-        try:
-            self.model, self.preprocess = clip.load('ViT-B/16', device=self.device)
-        except Exception as e:
-            print(f"Error loading CLIP model: {e}")
-            return None
-        print("CLIP model loaded.")
+        self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
         self.embeddings_folder = './data/embeddings/'
-        print("Embeddings folder set to: ", self.embeddings_folder)
         if not os.path.exists(self.embeddings_folder):
             os.makedirs(self.embeddings_folder)
 
@@ -83,7 +75,7 @@ class ClipModel():
 
             # Guardar el embedding en un archivo
             torch.save(image_features, embedding_filepath)
-            embeddings[image_file] = (image_features, idx)
+            embeddings[image_file] = image_features
 
         return embeddings
     

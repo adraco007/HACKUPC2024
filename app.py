@@ -53,7 +53,6 @@ def select_images():
     images_to_take, total_images = selector.select_images()
 
     index_list, similarity_list = processor.select_images(images_to_take)
-    print("processed")
 
     similarity_list = similarity_list.tolist()
     
