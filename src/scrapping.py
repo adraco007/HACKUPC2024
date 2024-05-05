@@ -38,16 +38,6 @@ class ZaraScraper:
                 product_id = match.group(1)
                 product_ids.append(product_id)
 
-    '''
-    def find_product(self, photo, product_links, product_ids):
-        parts = photo.split('/')
-        result = parts[11] + parts[12]
-
-        for product_id in product_ids:
-            if result == product_id:
-                link = product_links[product_ids.index(product_id)]
-                #print(link)
-    '''
 
 list_of_links = [
     "https://www.zara.com/es/es/mujer-blazers-l1055.html?v1=2352684&regionGroupId=105",
@@ -135,7 +125,7 @@ def extract_image_links_from_csv(csv_file='./data/inditextech_hackupc_challenge_
 
 # Uso de la función
 image_links = extract_image_links_from_csv()
-print(image_links)
+#print(image_links)
 save_list_to_csv(image_links, './data/image_links.csv')
 
 
@@ -147,22 +137,24 @@ product_ids = pd.read_csv('./data/product_ids.csv')['data'].tolist()
 # Crear un DataFrame vacío para la nueva base de datos
 df = pd.DataFrame(columns=['photo_link', 'product_link'])
 
+# Crear un diccionario con product_ids como claves y product_links como valores
+product_dict = {product_id: product_link for product_id, product_link in zip(product_ids, product_links)}
+
 
 # Para cada photo en image_links
 for photo in image_links:
+    print('Processing photo')
     parts = photo.split('/')
     result = parts[11] + parts[12]
+    print(result)
 
-    # Si result está en product_ids
-    if result in product_ids:
-        # Obtener el enlace del producto correspondiente
-        product_link = product_links[product_ids.index(result)]
-    else:
-        # Si no se encuentra ninguna coincidencia, usar NaN
-        product_link = np.nan
+    # Buscar el product_link correspondiente en el diccionario
+    product_link = product_dict.get(result, np.nan)
+    print(f'Product id: {result}, Product link: {product_link}')
 
     # Agregar una nueva fila al DataFrame
-    df = df._append({'photo_link': photo, 'product_link': product_link}, ignore_index=True)
+    df = df._append({'photo_link': str(photo), 'product_link': str(product_link)}, ignore_index=True)
 
 # Guardar el DataFrame en un archivo CSV
 df.to_csv('./data/links_photo_to_product.csv', index=False)
+

@@ -10,6 +10,10 @@ document.getElementById('uploadButton').addEventListener('click', function (even
         let formData = new FormData();
         formData.append('file', file);
 
+        season = document.getElementById('selector1').value;
+        product_type = document.getElementById('selector2').value;
+
+
         // Call the Flask route for processing the uploaded file
         fetch('/process_uploaded_file', {
             method: 'POST',
@@ -25,7 +29,20 @@ document.getElementById('uploadButton').addEventListener('click', function (even
             .then(data => {
                 // Handle the result
                 console.log(data);
+                indexs = data.indexs;
+
+                for (let i = 0; i < indexs.length; i++) {
+                    let index = indexs[i];
+                    // Take image from index
+                    let url = `/images_from_index?index=${index}`;
+                    urls.push(url);
+                }
+
                 urls = data.urls;
+                actual_url = urls[0];
+                let rightPhoto = document.getElementById('outfitImage');
+                rightPhoto.src = actual_url;
+
             })
             .catch(error => {
                 console.error('Error:', error);
