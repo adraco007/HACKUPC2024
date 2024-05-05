@@ -164,7 +164,7 @@ def get_image_link():
                 break
 
     return jsonify({
-        'link': product_link
+        'url': product_link
     })
 
 

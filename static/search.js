@@ -5,6 +5,7 @@ let nextButton = document.getElementById('nextButton');
 // Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
+let urls_to_shop =[];
 
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
@@ -48,6 +49,27 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     // Take image from index
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);
+
+                    // Use get image link to get link from the index of the image
+                    fetch(url, {
+                        method: 'GET'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to get image link');
+                            }
+                            // If the response is ok, handle the result
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the result
+                            console.log(data);
+                            urls_to_shop.push(data.url);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Handle errors here
+                        });
                 }
 
                 actual_url = urls[0];
