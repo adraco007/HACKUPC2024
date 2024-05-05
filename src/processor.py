@@ -8,6 +8,8 @@ from model_clip import ClipModel
 from embeds_visualizer_class import EmbedsVisualizer
 from clusterPrevi import ImageClassifier
 import pickle
+import os
+import time
 
 """
 Communication between the GUI and the backend
@@ -19,28 +21,29 @@ class Processor:
 
     def find_outfit(self, selected_image_pathfile, vector, top_n=5):
         c = ClipModel()
-        """
-        Given an image, give back the x most similar images from the database
-        """
-        # Placeholder: 
-        if vector == None:
+        if vector is None:
+            # Process the selected image to get its embedding
             embedding_selected_image = c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
-            # Compute the simmularity with all the embeddings
-            # First we load the embeddings
+            # Load all embeddings
             embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
-            # Then we compute the similarity with the cosine similarity
-            # We return the top 5 most similar images
+
+            # Remove the embedding of the selected image from the dictionary to avoid self-comparison
+            selected_filename = os.path.basename(selected_image_pathfile)
+            selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
+            embeddings.pop(selected_embedding_key, None)
+
+            # Compute cosine similarities
             similarities = {}
-    
-            # Calcular la similaridad del coseno entre el vector dado y cada embedding en el diccionario
             for key, embedding in embeddings.items():
                 sim = self.cosine_similarity(embedding_selected_image, embedding)
                 similarities[key] = sim
-            
-            # Ordenar las similaridades y obtener las top_n claves
+
+            # Sort by similarity and select top N
             sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
-            print(sorted_keys)
-            return sorted_keys
+
+            # Convert filenames to numerical indices and return
+            indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
+            return indices
             
 
     def select_images(self, vector):
@@ -92,8 +95,15 @@ class Processor:
         else:
             return embeddings, indexes
     
-    def cosine_similarity(self,vec1, vec2):
-        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+    def cosine_similarity(self, vec1, vec2):
+        # Flatten the vectors to make sure they are 1-dimensional.
+        vec1 = vec1.flatten()
+        vec2 = vec2.flatten()
+        # Perform dot product only if they are properly aligned.
+        if vec1.shape[0] == vec2.shape[0]:
+            return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+        else:
+            raise ValueError("Vector dimensions do not match.")
         
     def get_canta_vectors(self):
         """
@@ -102,9 +112,10 @@ class Processor:
         ImageClassifier().load_data()
         pass    
         
-Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+#Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
-
+t0 = time.time()
 p = Processor()
-p.find_outfit(selected_image_pathfile = "./data/uploaded/image_1.jpg", vector=None)
-
+top_indices = p.find_outfit(selected_image_pathfile="./data/uploaded/image_1.jpg", vector=None)
+print("Indices of top similar images:", top_indices)
+print("Time taken:", time.time()-t0)
