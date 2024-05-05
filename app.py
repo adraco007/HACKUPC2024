@@ -23,10 +23,12 @@ def process_uploaded_file():
     # Save the file
     uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
 
-    similarity_vector = processor.find_outfit()
+    indexs = processor.find_outfit()
 
-    # No response needed, ok code only
-    return '', 200
+    # Return JSON response
+    return jsonify({
+        'indexs': indexs
+    })
 
 @app.route('/generate_image')
 def generate_image():
