@@ -7,6 +7,7 @@ from src.clusterPrevi import ImageClassifier
 import pickle
 import os
 import time
+import shutil
 
 """
 Communication between the GUI and the backend
@@ -26,11 +27,12 @@ class Processor:
         self.embeddings, self.index_dict = self.c.load_embeddings(embeddings_folder='./data/embeddings/')
 
 
-    def find_outfit(self, vector, top_n=6):
+    def find_outfit(self, vector, top_n=5):
         #from data/generated_images/ take the name
         names = os.listdir('./data/uploaded_images/')
         name = names[0]
         selected_image_pathfile = './data/uploaded_images/' + name
+
         if not self.c.downloaded:
             self.c.download(offline=True)
         if True:
@@ -46,17 +48,24 @@ class Processor:
 
             # Compute cosine similarities
             similarities = {}
+            print("aaaaaaaaaa",embedding_selected_image)
             for key, embedding in self.embeddings.items():
                 sim = self.cosine_similarity(embedding_selected_image, embedding)
                 similarities[key] = sim
             
             # Sort by similarity and select top N
-            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[1:top_n]
+            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
+            print("aaaaaaa", similarities["img_26_1.jpg"])
+            print("aaaaaaa", sorted_keys)
             print("aaaaaaa", len(self.embeddings))
             # Convert filenames to numerical indices and return
             indices = []
             for key in sorted_keys:
                 indices.append(self.index_dict[key])
+
+            shutil.rmtree('./data/uploaded_images/')
+            os.makedirs('./data/uploaded_images/')
+            
             return indices
             """
     def find_outfit(self, vector, top_n=5):
@@ -195,6 +204,6 @@ p = Processor()
 top_indices = p.find_outfit(vector=[None])
 print("Indices of top similar images:", top_indices)
 print("Time taken:", time.time()-t0)"""
-
+"""
 p = Processor()
-p.find_outfit(vector=[None])
+p.find_outfit(vector=[None])"""
