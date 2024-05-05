@@ -7,12 +7,31 @@ import numpy as np
 import pickle
 
 class ClipModel():
-    def __init__(self):
+    def __init__(self, download = False):
         self.device = "cpu"
-        self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+        self.downloaded = download
+        self.preprocess = None
+        self.model = None
+        if download:
+            self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+            with open('./models/preprocess.pkl', 'wb') as f:
+                pickle.dump(self.preprocess, f)
+            with open('./models/clip_model_.pkl', 'wb') as f:
+                pickle.dump(self.model, f)
+    
         self.embeddings_folder = './data/embeddings/'
         if not os.path.exists(self.embeddings_folder):
             os.makedirs(self.embeddings_folder)
+
+    def download(self, offline = False):
+        if offline:
+            with open('./models/preprocess.pkl', 'rb') as f:
+                self.preprocess= pickle.load(f)
+            with open('./models/clip_model_.pkl', 'rb') as f:
+                self.model = pickle.load(f)
+        else:
+            self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
+        
 
     def _process_image(self, image_path):
         # Función para cargar y procesar una imagen
@@ -84,16 +103,71 @@ class ClipModel():
         print(embeddings[image_file].shape)
         return embeddings, indexes
 
-    def load_embeddings(self, embeddings_folder='./data/embeddings/'):
+    def select_embeddings(self, vector_images):
+        vector_images = np.array(vector_images)
+        indexes = np.argwhere(vector_images==1)
+        x = np.array(self.list_dirs_img)
+
+        filenames = x[indexes]
+        filenames = filenames.flatten()
+
+        embeddings = {}
+        indexes = {}
+        for file_name in filenames:
+            embeddings[file_name] = self.embeddings_dict[file_name]
+            indexes[file_name] = self.embeddings_index_dict[file_name]
+        
+        return embeddings, indexes
+
+    def load_embeddings(self, embeddings_folder='./data/embeddings/', image_folder='./data/images/'):
         # Cargar los embeddings de las imágenes
         embeddings = {}
-        for embedding_file in os.listdir(embeddings_folder):
-            embedding_filepath = os.path.join(embeddings_folder, embedding_file)
+        self.list_dirs_emb = os.listdir(embeddings_folder)
+        self.list_dirs_emb.sort()
+        
+        self.list_dirs_img = os.listdir(image_folder)
+        self.list_dirs_img.sort()
+        
+        embedding_dict = {}
+        for index in range(len(self.list_dirs_img)):
+            embedding_dict[self.list_dirs_img[index]] = index
+            embedding_filepath = os.path.join(embeddings_folder, self.list_dirs_emb[index])
             embedding = torch.load(embedding_filepath)
-            embeddings[embedding_file] = embedding
-        return embeddings
-    
+            embeddings[self.list_dirs_img[index]] = embedding
 
+        self.embeddings_dict = embeddings
+        self.embeddings_index_dict = embedding_dict
+        return embeddings, embedding_dict
+    
+    def load_selection_embeddings(self, vector, embeddings_folder='./data/embeddings/'):
+        filenames = os.listdir(embeddings_folder)
+        filenames.sort()
+        
+        embeddings = {}
+
+        vector_np = np.zeros(len(filenames))
+        vector_np[:len(vector)] = np.array(vector)
+        
+        indexes = np.arange(0,len(filenames))
+        
+        filenames_np = np.array(filenames)
+        filenames_np_select = filenames_np[vector_np == 1]
+        
+        print("pre",indexes)
+        indexes_select = indexes[vector_np == 1]
+        print("post", indexes_select)
+        
+        filenames_dict = {}
+        for index in indexes_select:
+            filenames_dict[filenames[index]] = index
+
+        for filename in filenames_np_select:
+            embedding_filepath = os.path.join(embeddings_folder, filename)
+            embedding = torch.load(embedding_filepath)
+            embeddings[filename] = embedding
+        return embeddings, filenames_dict
+
+    
     def process_select_image(self, image_path: str, embedding_path='./data/embeddings_test/'):
 
         image_filepath = image_path
@@ -118,12 +192,17 @@ class ClipModel():
             # Guardar la instancia de la clase utilizando pickle
             with open(file_path, 'wb') as f:
                 pickle.dump(self, f)
+            with open('./models/preprocess.pkl', 'wb') as f:
+                pickle.dump(self.preprocess, f)
+            with open('./models/clip_model_.pkl', 'wb') as f:
+                pickle.dump(self.model, f)
             print(f"Modelo guardado como archivo binario en: {file_path}")
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
 
-"""model = ClipModel()
-model.save_self()"""
+model = ClipModel(download=True)
+model.process_images()
+model.save_self()
 
 """
 start_time = time.time()

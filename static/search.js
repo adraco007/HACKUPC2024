@@ -2,9 +2,15 @@
 let prevButton = document.getElementById('prevButton');
 let nextButton = document.getElementById('nextButton');
 
+let rightPhoto = document.getElementById('outfitImage');
+
+// Take the rectangle that works as the visual indicator
+let rectangle = document.getElementById('visual_indicator');
+
 // Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
+let urls_to_shop =[];
 
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
@@ -48,12 +54,39 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     // Take image from index
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);
+
+                    // Use get image link to get link from the index of the image
+                    fetch(url, {
+                        method: 'GET'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to get image link');
+                            }
+                            // If the response is ok, handle the result
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the result
+                            console.log(data);
+                            urls_to_shop.push(data.url);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Handle errors here
+                        });
                 }
 
                 actual_url = urls[0];
                 console.log(urls);
-                let rightPhoto = document.getElementById('outfitImage');
                 rightPhoto.src = actual_url;
+
+                // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+                if (urls_to_shop[0] !== NaN) {
+                    rectangle.style.backgroundColor = 'green';
+                } else {
+                    rectangle.style.backgroundColor = 'gray';
+                }
 
             })
             .catch(error => {
@@ -89,6 +122,13 @@ nextButton.addEventListener('click', function (event) {
         actual_url = urls[index + 1];
         let rightPhoto = document.getElementById('outfitImage');
         rightPhoto.src = actual_url;
+
+        // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+        if (urls_to_shop[index + 1] !== NaN) {
+            rectangle.style.backgroundColor = 'green';
+        } else {
+            rectangle.style.backgroundColor = 'gray';
+        }
     }
 });
 
@@ -100,5 +140,20 @@ prevButton.addEventListener('click', function (event) {
         actual_url = urls[index - 1];
         let rightPhoto = document.getElementById('outfitImage');
         rightPhoto.src = actual_url;
+
+        // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
+        if (urls_to_shop[index - 1] !== NaN) {
+            rectangle.style.backgroundColor = 'green';
+        } else {
+            rectangle.style.backgroundColor = 'gray';
+        }
+    }
+});
+
+// Add a listener to the right photo to open the link to shop
+rightPhoto.addEventListener('click', function () {
+    let index = urls.indexOf(actual_url);
+    if (urls_to_shop[index] !== NaN) {
+        window.open(urls_to_shop[index]);
     }
 });

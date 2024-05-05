@@ -208,8 +208,6 @@ class EmbedsVisualizer:
         #print(temporal_similarity_matrix)
         # Continuar encontrando los siguientes índices con máxima similitud iterativamente
         for i in range(2, num_images):
-            
-            
             # Encontrar el máximo en la matriz de similitudes
             fila, next_idx = np.unravel_index(np.argmax(temporal_similarity_matrix), temporal_similarity_matrix.shape)
             max_similarity = temporal_similarity_matrix[fila, next_idx]
@@ -224,6 +222,9 @@ class EmbedsVisualizer:
             similarity_list[i] = max_similarity
             related_names.append(filenames[indices_matriz[fila]])
             # Configurar las similitudes a cero para el nuevo elemento encontrado
+            for val in indices_matriz:
+                similarity_matrix[val, next_idx] = 0
+                similarity_matrix[next_idx, val] = 0
             similarity_matrix[indices_matriz[fila], next_idx] = 0
             similarity_matrix[next_idx, indices_matriz[fila]] = 0
 
@@ -235,14 +236,14 @@ class EmbedsVisualizer:
         t1=time.time()
         print(f'Tiempo de ejecución: {t1-t0}')
         count=0
-        viz_dict={}
+        """viz_dict={}
         for idx in indices_matriz:
-            if count==num_images:
+            if count==len(indices_matriz):
                 break
             viz_dict[filenames[idx]]= (similarity_list[count], related_names[count])
             count+=1
-        self.visualize_embeddings(viz_dict)
-
+        self.visualize_embeddings(viz_dict)"""
+        print("aaaaaaaaaa",indices_matriz)
         vector_indexes = [indexes[filenames[idx]] for idx in indices_matriz]
         print(indices_matriz)
         print(filenames[indices_matriz[3]])
