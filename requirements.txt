@@ -5,5 +5,5 @@ clip
 torch
 pillow
 matplotlib
-urllib
+urllib3
 sklearn
