@@ -1,3 +1,12 @@
+// Get buttons prevButton and nextButton
+let prevButton = document.getElementById('prevButton');
+let nextButton = document.getElementById('nextButton');
+
+// Add event listeners to the buttons
+let urls = [];
+let actual_url = NaN;
+let urls_to_shop =[];
+
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
 
@@ -12,6 +21,10 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 
         season = document.getElementById('selector1').value;
         product_type = document.getElementById('selector2').value;
+        category = document.getElementById('selector3').value;
+        formData.append('season', season);
+        formData.append('product_type', product_type);
+        formData.append('category', category);
 
 
         // Call the Flask route for processing the uploaded file
@@ -36,10 +49,31 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     // Take image from index
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);
+
+                    // Use get image link to get link from the index of the image
+                    fetch(url, {
+                        method: 'GET'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to get image link');
+                            }
+                            // If the response is ok, handle the result
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the result
+                            console.log(data);
+                            urls_to_shop.push(data.url);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Handle errors here
+                        });
                 }
 
-                urls = data.urls;
                 actual_url = urls[0];
+                console.log(urls);
                 let rightPhoto = document.getElementById('outfitImage');
                 rightPhoto.src = actual_url;
 
@@ -69,3 +103,24 @@ document.getElementById('fileInput').addEventListener('change', function () {
 });
 
 
+// once the person uses the next button:
+nextButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent form submission
+    let index = urls.indexOf(actual_url);
+    if (index < urls.length - 1) {
+        actual_url = urls[index + 1];
+        let rightPhoto = document.getElementById('outfitImage');
+        rightPhoto.src = actual_url;
+    }
+});
+
+// once the person uses the prev button:
+prevButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent form submission
+    let index = urls.indexOf(actual_url);
+    if (index > 0) {
+        actual_url = urls[index - 1];
+        let rightPhoto = document.getElementById('outfitImage');
+        rightPhoto.src = actual_url;
+    }
+});

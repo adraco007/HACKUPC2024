@@ -17,18 +17,34 @@ def index():
 
 @app.route('/process_uploaded_file', methods=['POST'])
 def process_uploaded_file():
+    # Get the formData from the request
+    season = request.form.get('season')
+    product_type = request.form.get('style')
+    section = request.form.get('section')
+
     # Get the uploaded file
     uploaded_file = request.files['file']
 
     # Save the file
     uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
 
-    indexs = processor.find_outfit()
+    if season == "Season":
+        season = None
+    if product_type == "Product Type":
+        product_type = None
+    if section == "Section":
+        section = None
+
+    indexs = processor.find_outfit([season, product_type, section])
+    print(indexs)
+    indexs.sort()
 
     # Return JSON response
     return jsonify({
         'indexs': indexs
     })
+
+
 
 @app.route('/generate_image')
 def generate_image():
@@ -76,7 +92,7 @@ def select_images():
 def images_from_index():
     try:
         index = int(request.args.get('index'))  # Convert to int
-        print("Index parsed correctly")
+        print("Index parsed correctly: ", index)
     except:
         print("Error: index is not an integer")
         index = 0
@@ -86,6 +102,7 @@ def images_from_index():
     images = os.listdir('data/images')
     images.sort()
     image = images[index]
+    print(f"Image selected: {image}")
 
     # Return the image
     return send_from_directory('data/images', image)
@@ -114,6 +131,41 @@ def order():
 @app.route('/search')
 def search():
     return render_template('search.html')
+
+@app.route('get_image_link')
+def get_image_link():
+    try:
+        index = int(request.args.get('index'))  # Convert to int
+        print("Index parsed correctly")
+    except:
+        print("Error: index is not an integer")
+        index = 0
+    names = os.listdir('data/images')
+    names.sort()
+    name = names[index]
+    # format: img_x_y.jpg -> (x, y)
+    x = int(name.split('_')[1])
+    y = int(name.split('_')[2].split('.')[0])
+
+    # Check in data\inditextech_hackupc_challenge_images.csv for the link in that position
+    with open('data/inditextech_hackupc_challenge_images.csv', 'r') as f:
+        lines = f.readlines()
+        link = lines[x+1].split(',')[y-1]
+
+    product_link = None
+
+    # Check if link exists in extraData\links_photo_to_product.csv
+    with open('data/extraData/links_photo_to_product.csv', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            if link in line:
+                product_link = line.split(',')[1]
+                print(f"Link: {link}")
+                break
+
+    return jsonify({
+        'url': product_link
+    })
 
 
 if __name__ == '__main__':
