@@ -6,4 +6,4 @@ torch
 pillow
 matplotlib
 urllib3
-sklearn
+scikit-learn
