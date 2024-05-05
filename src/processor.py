@@ -13,25 +13,34 @@ Communication between the GUI and the backend
 """
 
 class Processor:
-    def __init__(self):
+    def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model.pkl'):
         self.data = None
+        if load_model:
+            self.c = pickle.load(open(model_pathfile, 'rb'))
+        else:
+            self.c = ClipModel(download=download)
+            if download:
+                self.c.process_images()
+
+        self.embeddings, self.index_dict = self.c.load_embeddings(embeddings_folder='./data/embeddings/')
+
 
     def find_outfit(self, selected_image_pathfile, vector, top_n=5):
-        c = ClipModel()
+        
         if vector is None:
             # Process the selected image to get its embedding
-            embedding_selected_image = c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
+            embedding_selected_image = self.c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
-            embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
+            #embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
 
             # Remove the embedding of the selected image from the dictionary to avoid self-comparison
             selected_filename = os.path.basename(selected_image_pathfile)
             selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
-            embeddings.pop(selected_embedding_key, None)
+            del self.embeddings[selected_embedding_key]
 
             # Compute cosine similarities
             similarities = {}
-            for key, embedding in embeddings.items():
+            for key, embedding in self.embeddings.items():
                 sim = self.cosine_similarity(embedding_selected_image, embedding)
                 similarities[key] = sim
 
@@ -39,7 +48,9 @@ class Processor:
             sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
 
             # Convert filenames to numerical indices and return
-            indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
+            indices = []
+            for key in sorted_keys:
+                indices.append(self.index_dict)
             return indices
             
 
@@ -48,8 +59,10 @@ class Processor:
         given a vector of 1s and 0s, take from the images the ones that have a 1;
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
+        self.embeddings
+        get_embeddings = False
         print("Processing images")
-        embeddings, indexes = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=True, model_pathfile="./models/clip_model.pkl")
+
         print("Embeddings processed")
         vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings, indexes=indexes,  vector_length=len(vector))
         #image = Image.open('data/generated_images/image1.png')
@@ -61,9 +74,8 @@ class Processor:
         given a vector of 1s and 0s, take from the images the ones that have a 1;
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
-
-        embeddings, indexes = self.get_embeddings(image_vector = vector, image_path="./data/images", created_model=True, model_pathfile="./models/clip_model.pkl")
-
+        embeddings, indexes = self.c.select_embeddings(vector)
+        
         e = EmbedsVisualizer()
         vector_indices, vector_similaridades = e.get_max_similarity_optimized(embeddings=embeddings, indexes=indexes)
         #image = Image.open('data/generated_images/image1.png')
@@ -92,7 +104,22 @@ class Processor:
             return embeddings, selected_image_embedding
         else:
             return embeddings, indexes
-    
+        
+    def load_embeddings(self, vector, created_model = False, model_pathfile = "./models/clip_model.pkl"):
+        """
+        Given a vector of images, return the embeddings of the images
+        """
+        if created_model:
+            model = pickle.load(open(model_pathfile, 'rb'))
+        else:
+            try:
+                model = ClipModel()
+            except Exception as e:
+                print(e)
+                return None
+        embeddings, indexes = model.load_selection_embeddings(vector)
+        return embeddings, indexes
+
     def cosine_similarity(self, vec1, vec2):
         # Flatten the vectors to make sure they are 1-dimensional.
         vec1 = vec1.flatten()
@@ -109,9 +136,25 @@ class Processor:
         """
         ImageClassifier().load_data()
         pass    
-        
-#Processor().select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+"""
+
+proc = Processor()
+proc.c.load_embeddings(embeddings_folder='./data/embeddings/')
+
+proc.select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 #Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
+
+"""
+
+"""
+vector = [0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1]
+model = ClipModel()
+embeddings, indexes = model.get_embeddings()
+embeddings2, indexes2 = model.load_embeddings(vector)
+
+print(f'Embeddings: \nIndexes: {indexes}\n\n')
+print(f'Embeddings2: \nIndexes2: {indexes2}')
+"""
 """t0 = time.time()
 p = Processor()
 top_indices = p.find_outfit(selected_image_pathfile="./data/uploaded/image_1.jpg", vector=None)
