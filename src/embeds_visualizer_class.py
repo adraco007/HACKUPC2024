@@ -180,8 +180,8 @@ class EmbedsVisualizer:
         row_idx, col_idx = np.unravel_index(np.argmax(similarity_matrix), similarity_matrix.shape)
         indices_matriz.append(row_idx)
         indices_matriz.append(col_idx)
-        max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
-        max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
+        max_similarities[filenames[row_idx]] = similarity_matrix[row_idx, col_idx]
+        max_similarities[filenames[col_idx]] = similarity_matrix[row_idx, col_idx]
         
         #print(vector_indices)
         #print(filenames)
@@ -199,7 +199,7 @@ class EmbedsVisualizer:
         
         # Configurar las similitudes a cero para los elementos ya encontrados
         similarity_matrix[row_idx, col_idx] = 0
-
+        similarity_matrix[col_idx, row_idx] = 0
 
         # Matriz de similitudes temporal para encontrar los siguientes elementos
         temporal_similarity_matrix = similarity_matrix[indices_matriz,:]
@@ -213,9 +213,9 @@ class EmbedsVisualizer:
             # Encontrar el máximo en la matriz de similitudes
             fila, next_idx = np.unravel_index(np.argmax(temporal_similarity_matrix), temporal_similarity_matrix.shape)
             max_similarity = temporal_similarity_matrix[fila, next_idx]
-            
+            print(f'Se cumple?: {temporal_similarity_matrix[fila, next_idx]==similarity_matrix[next_idx, indices_matriz[fila]]}')
             # Agregar la imagen con máxima similitud al diccionario
-            max_similarities[filenames[next_idx]] = (max_similarity, filenames[next_idx])
+            max_similarities[i] = max_similarity
             
             # Agregar los índices de vector
             vector_indices.append(embeddings[filenames[next_idx]])
@@ -242,7 +242,11 @@ class EmbedsVisualizer:
             viz_dict[filenames[idx]]= (similarity_list[count], related_names[count])
             count+=1
         self.visualize_embeddings(viz_dict)
-        return vector_indices, similarity_list
+
+        vector_indexes = [indexes[filenames[idx]] for idx in indices_matriz]
+        print(indices_matriz)
+        print(filenames[indices_matriz[3]])
+        return vector_indexes, similarity_list
 
 
         

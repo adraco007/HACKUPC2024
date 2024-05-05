@@ -54,7 +54,7 @@ def select_images():
     selector = RandomImageSelector(n_images)
     images_to_take, total_images = selector.select_images()
 
-    index_list, similarity_list = processor.select_images(images_to_take)
+    index_list, similarity_list = processor.select_images_optimized(images_to_take)
 
     similarity_list = similarity_list.tolist()
     
@@ -63,7 +63,7 @@ def select_images():
 
     # Map index to int 
     index_list = [int(i) for i in index_list]
-
+    print(index_list)
     print(index_list)
     print(similarity_list)
     # Return JSON response
