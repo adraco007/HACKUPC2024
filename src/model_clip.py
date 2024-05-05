@@ -58,6 +58,7 @@ class ClipModel():
 
         # Lista de embeddings
         embeddings = {}
+        indexes = {}
 
         for idx in np.argwhere(vector_images == 1):
   
@@ -72,7 +73,7 @@ class ClipModel():
             base_filename = os.path.basename(image_filepath)
             embedding_filename = os.path.splitext(base_filename)[0] + '.pt'
             embedding_filepath = os.path.join(embedding_path, embedding_filename)
-
+        
             # Guardar el embedding en un archivo
             torch.save(image_features, embedding_filepath)
             embeddings[image_file] = (image_features, idx)
@@ -87,6 +88,12 @@ class ClipModel():
             embedding = torch.load(embedding_filepath)
             embeddings[embedding_file] = embedding
         return embeddings
+    
+            embeddings[image_file] = image_features[0]
+            indexes[image_file] = idx[0]
+        print(image_features[0].shape)
+        print(embeddings[image_file].shape)
+        return embeddings, indexes
     
 
     def process_select_image(self, image_path: str, embedding_path='./data/embeddings_test/'):
