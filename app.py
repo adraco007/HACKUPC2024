@@ -132,7 +132,7 @@ def order():
 def search():
     return render_template('search.html')
 
-@app.route('get_image_link')
+@app.route('/get_image_link')
 def get_image_link():
     try:
         index = int(request.args.get('index'))  # Convert to int
