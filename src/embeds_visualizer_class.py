@@ -105,8 +105,8 @@ class EmbedsVisualizer:
         max_similarities[filenames[row_idx]] = (similarity_matrix[row_idx, col_idx], filenames[col_idx])
         max_similarities[filenames[col_idx]] = (similarity_matrix[row_idx, col_idx], filenames[row_idx])
 
-        vector_indices.append(embeddings[filenames[row_idx]][1][0])
-        vector_indices.append(embeddings[filenames[col_idx]][1][0])
+        vector_indices.append(embeddings[filenames[row_idx]][0][0])
+        vector_indices.append(embeddings[filenames[col_idx]][0][0])
 
         return_similarity_array_index=0
         similarity_list[return_similarity_array_index] = similarity_matrix[row_idx, col_idx]
