@@ -3,7 +3,7 @@ numpy
 pandas
 clip
 torch
-PIL
+pillow
 matplotlib
 urllib
 sklearn
