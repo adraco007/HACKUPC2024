@@ -134,7 +134,6 @@ def search():
 
 @app.route('/get_image_link')
 def get_image_link():
-    print("test")
     try:
         index = int(request.args.get('index'))  # Convert to int
         print("Index parsed correctly")
@@ -163,9 +162,11 @@ def get_image_link():
                 product_link = line.split(',')[1]
                 print(f"Link: {link}")
                 break
+    print(f"Product link: {product_link}")
+    print(f"Link:-----------------------------------------------------------------------------------------------------")
 
     return jsonify({
-        'url': product_link if product_link else "NaN"
+        'url': product_link
     })
 
 

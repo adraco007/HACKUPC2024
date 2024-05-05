@@ -59,7 +59,8 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 
                     // Use get image link to get link from the index of the image
                     fetch('/get_image_link', {
-                        method: 'GET'
+                        method: 'GET',
+                        body: JSON.stringify({ index: index})
                     })
                         .then(response => {
                             if (!response.ok) {
