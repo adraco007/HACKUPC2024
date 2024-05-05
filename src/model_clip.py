@@ -177,16 +177,6 @@ class ClipModel():
             image_features = self.model.encode_image(image)
             image_features /= image_features.norm(dim=-1, keepdim=True)
             embedding = image_features[0]
-
-        # Crear un nombre de archivo basado en el nombre de la imagen original
-        """base_filename = os.path.basename(image_filepath)
-        embedding_filename = os.path.splitext(base_filename)[0] + '.pt'
-        embedding_filepath = os.path.join(embedding_path, embedding_filename)"""
-
-        # Guardar el embedding en un archivo
-        #torch.save(image_features, embedding_filepath)
-        
-
         return embedding
     
     def save_self(self, file_path='./models/clip_model.pkl'):
@@ -202,12 +192,3 @@ class ClipModel():
         except Exception as e:
             print(f"Error al guardar el modelo: {e}")
 
-"""model = ClipModel(download=True)
-model.process_images()
-model.save_self()"""
-
-"""
-start_time = time.time()
-model.process_selected_images([0,0,0,0,0,1,1,1,0,0], images_path='./data/images/', embedding_path='./data/embeddings_test/')
-end_time = time.time()
-print(f"Time taken: {end_time - start_time} seconds")"""

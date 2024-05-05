@@ -134,6 +134,7 @@ def search():
 
 @app.route('/get_image_link')
 def get_image_link():
+    print("test")
     try:
         index = int(request.args.get('index'))  # Convert to int
         print("Index parsed correctly")
@@ -155,7 +156,7 @@ def get_image_link():
     product_link = None
 
     # Check if link exists in extraData\links_photo_to_product.csv
-    with open('data/extraData/links_photo_to_product.csv', 'r') as f:
+    with open('extraData/links_photo_to_product.csv', 'r') as f:
         lines = f.readlines()
         for line in lines:
             if link in line:
@@ -164,7 +165,7 @@ def get_image_link():
                 break
 
     return jsonify({
-        'url': product_link
+        'url': product_link if product_link else "NaN"
     })
 
 

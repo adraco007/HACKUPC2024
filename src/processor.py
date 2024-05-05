@@ -39,12 +39,7 @@ class Processor:
             # Process the selected image to get its embedding
             embedding_selected_image = self.c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
-            #embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
 
-            # Remove the embedding of the selected image from the dictionary to avoid self-comparison
-            selected_filename = os.path.basename(selected_image_pathfile)
-            #selected_embedding_key = os.path.splitext(selected_filename)[0] + '.pt'
-            #del self.embeddings[selected_embedding_key]
 
             # Compute cosine similarities
             similarities = {}
@@ -67,31 +62,7 @@ class Processor:
             os.makedirs('./data/uploaded_images/')
             
             return indices
-            """
-    def find_outfit(self, vector, top_n=5):
-        
-        selected_image_pathfile="./data/uploaded_images/pablo.jpg"
-        c = ClipModel()
-        if True:
             
-            # Process the selected image to get its embedding
-            embedding_selected_image = c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
-            # Load all embeddings
-            embeddings = c.load_embeddings(embeddings_folder='./data/embeddings/')
-            
-            # Compute cosine similarities
-            similarities = {}
-            for key, embedding in embeddings.items():
-                sim = self.cosine_similarity(embedding_selected_image, embedding)
-                similarities[key] = sim
-            
-            # Sort by similarity and select top N
-            sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
-            
-            # Convert filenames to numerical indices and return
-            indices = [int(k.split('_')[1].split('.')[0]) for k in sorted_keys]
-            return indices
-        """
 
     def select_images(self, vector):
         """
@@ -176,34 +147,3 @@ class Processor:
         ImageClassifier().load_data()
         pass 
 
-
-
-
-#ClipModel(download=True)   
-"""
-
-proc = Processor()
-proc.c.load_embeddings(embeddings_folder='./data/embeddings/')
-
-proc.select_images_optimized([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-#Processor().find_outfit([0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], selected_image_pathfile = "./data/images/img_0_1.jpg")
-
-"""
-
-"""
-vector = [0,0,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,0,0,0,1]
-model = ClipModel()
-embeddings, indexes = model.get_embeddings()
-embeddings2, indexes2 = model.load_embeddings(vector)
-
-print(f'Embeddings: \nIndexes: {indexes}\n\n')
-print(f'Embeddings2: \nIndexes2: {indexes2}')
-"""
-"""t0 = time.time()
-p = Processor()
-top_indices = p.find_outfit(vector=[None])
-print("Indices of top similar images:", top_indices)
-print("Time taken:", time.time()-t0)"""
-"""
-p = Processor()
-p.find_outfit(vector=[None])"""

@@ -12,7 +12,7 @@ let goToGradio = document.getElementById('goToGradio');
 // Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
-let urls_to_shop =[];
+let urls_to_shop =[NaN, NaN, NaN, NaN, NaN];
 
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
@@ -58,7 +58,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     urls.push(url);
 
                     // Use get image link to get link from the index of the image
-                    fetch(url, {
+                    fetch('/get_image_link', {
                         method: 'GET'
                     })
                         .then(response => {
@@ -75,12 +75,14 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                         })
                         .catch(error => {
                             console.error('Error:', error);
+                            urls_to_shop.push(NaN);
                             // Handle errors here
                         });
                 }
 
                 actual_url = urls[0];
                 console.log(urls);
+                console.log(urls_to_shop);
                 rightPhoto.src = actual_url;
 
                 // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
@@ -145,7 +147,7 @@ prevButton.addEventListener('click', function (event) {
 
         // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
         if (urls_to_shop[index - 1] !== NaN) {
-            rectangle.style.backgroundColor = 'green';
+            rectangle.style.backgroundColor = 'red';
         } else {
             rectangle.style.backgroundColor = 'gray';
         }
