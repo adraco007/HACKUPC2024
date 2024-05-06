@@ -3,7 +3,8 @@
 ### Procés:
 - Scrapping: image_scrapping_opt
 - Inicialitzar model: model_clip
-- Preprocessat de dades
+- Preprocessat de dades: preprocessing_opt
+
 model clip opt no va
 model no va
 
