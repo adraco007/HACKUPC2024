@@ -51,8 +51,8 @@ def images_from_index():
 
 # Functions
 """ From the index of an image, get the link of the product in the zara website """
-@app.route('/get_image_link')
-def get_image_link():
+@app.route('/get_shop_link')
+def get_shop_link():
     try:
         index = int(request.args.get('index'))
         print("Index parsed correctly")
@@ -85,15 +85,17 @@ def get_image_link():
 
     return jsonify({'url': product_link})
 
-""" Get the image from the index, alphanumerically sorted"""
-@app.route('/select_images')
-def select_images():
+""" 
+Given the number of images, select that random ammount of images from the ones
+that are in the data/images folder. Then, get the 4 most similar images amongst them
+"""
+@app.route('/select_similar_images')
+def select_similar_images():
     try:
-        n_images = int(request.args.get('n_images'))  # Convert to int
-        print("Number parsed correctly")
+        n_images = int(request.args.get('n_images'))
     except:
-        print("Error: n_images is not an integer")
-        n_images = 10  # Default value
+        print("Error: unable to parse n_images")
+        n_images = 10
         
     selector = RandomImageSelector(n_images)
     images_to_take, total_images = selector.select_images()

@@ -9,7 +9,7 @@ document.getElementById('load_images_button').addEventListener('click', function
     let nImages = document.getElementById('imageCountInput').value;
 
     // Call random selector with the amount of images as a query parameter
-    fetch(`/select_images?n_images=${nImages}`)
+    fetch(`/select_similar_images?n_images=${nImages}`)
         .then(response => response.json())
         .then(data => {
             console.log("Response received:", data); // Debug message
