@@ -29,10 +29,10 @@ def serve_image(filename):
 def serve_generated_image(filename):
     return send_from_directory('data/generated_images', filename)
 
-@app.route('/static/blank.png')
-def serve_blank_image():
-    return send_from_directory('static', 'blank.png')
-
+@app.route('/static/images/<path:filename>')
+def serve_blank_image(filename):
+    return send_from_directory('static/images', filename)
+                               
 """ Get the image from the index, alphanumerically sorted"""
 @app.route('/images_from_index')
 def images_from_index():
