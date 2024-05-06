@@ -32,7 +32,6 @@ class ClipModel():
         else:
             self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
         
-
     def _process_image(self, image_path):
         # Función para cargar y procesar una imagen
         image = Image.open(image_path)
@@ -172,7 +171,7 @@ class ClipModel():
 
         image_filepath = image_path
         image = self._process_image(image_filepath)
-        print("bbbbbbbbbbbbbbbbbbbbbbbbb",image_filepath)
+        
         with torch.no_grad():
             image_features = self.model.encode_image(image)
             image_features /= image_features.norm(dim=-1, keepdim=True)
