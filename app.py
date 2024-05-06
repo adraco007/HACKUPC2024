@@ -5,17 +5,12 @@ from flask import request, jsonify, send_from_directory
 import os
 
 processor = Processor()
-
 app = Flask(__name__)
 
-# Templates
+# Get templates
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/outfit')
-def outfit():
-    return render_template('outfit.html')
 
 @app.route('/order')
 def order():
@@ -25,7 +20,7 @@ def order():
 def search():
     return render_template('search.html')
 
-# Images
+# Get images
 @app.route('/images/<path:filename>')
 def serve_image(filename):
     return send_from_directory('data/images', filename)
@@ -38,26 +33,44 @@ def serve_generated_image(filename):
 def serve_blank_image():
     return send_from_directory('static', 'blank.png')
 
+""" Get the image from the index, alphanumerically sorted"""
+@app.route('/images_from_index')
+def images_from_index():
+    try:
+        index = int(request.args.get('index'))
+    except:
+        print("Error: unable to parse index")
+        index = 0
+    
+    images = os.listdir('data/images')
+    images.sort()
+    image = images[index]
+    print(f"Image selected: {image}")
+
+    return send_from_directory('data/images', image)
+
 # Functions
+""" From the index of an image, get the link of the product in the zara website """
 @app.route('/get_image_link')
 def get_image_link():
     try:
-        index = int(request.args.get('index'))  # Convert to int
+        index = int(request.args.get('index'))
         print("Index parsed correctly")
     except:
         print("Error: index is not an integer")
         index = 0
+
     names = os.listdir('data/images')
     names.sort()
     name = names[index]
+
     # format: img_x_y.jpg -> (x, y)
     x = int(name.split('_')[1])
     y = int(name.split('_')[2].split('.')[0])
 
-    # Check in data\inditextech_hackupc_challenge_images.csv for the link in that position
     with open('data/inditextech_hackupc_challenge_images.csv', 'r') as f:
         lines = f.readlines()
-        link = lines[x+1].split(',')[y-1]
+        link = lines[x+1].split(',')[y-1] # Header is the first line, every set has images 1-3
 
     product_link = None
 
@@ -70,29 +83,9 @@ def get_image_link():
                 print(f"Link: {link}")
                 break
 
-    return jsonify({
-        'url': product_link
-    })
+    return jsonify({'url': product_link})
 
-@app.route('/images_from_index')
-def images_from_index():
-    try:
-        index = int(request.args.get('index'))  # Convert to int
-        print("Index parsed correctly: ", index)
-    except:
-        print("Error: index is not an integer")
-        index = 0
-    
-    # From data/images take the image with the index
-    # Get the names of all the images
-    images = os.listdir('data/images')
-    images.sort()
-    image = images[index]
-    print(f"Image selected: {image}")
-
-    # Return the image
-    return send_from_directory('data/images', image)
-
+""" Get the image from the index, alphanumerically sorted"""
 @app.route('/select_images')
 def select_images():
     try:
