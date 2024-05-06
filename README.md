@@ -1,5 +1,12 @@
 # HACKUPC2024
 
+### Procés:
+- Scrapping: image_scrapping_opt
+- Inicialitzar model: model_clip
+- Preprocessat de dades
+model clip opt no va
+model no va
+
 ## Inspiration
 As students of the artificial intelligence degree (from UPC), we have obviously been influenced by all the knowledge gained in the last months, where we have started to deal with neural networks, among other things. That's why we started with this challenge, as it served us to practice what we had learnt in class.
 
