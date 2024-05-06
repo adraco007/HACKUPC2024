@@ -49,10 +49,10 @@ document.getElementById('uploadButton').addEventListener('click', function (even
             .then(data => {
                 // Handle the result
                 console.log(data);
-                indexs = data.indexs;
+                indexes = data.indexes;
 
-                for (let i = 0; i < indexs.length; i++) {
-                    let index = indexs[i];
+                for (let i = 0; i < indexes.length; i++) {
+                    let index = indexes[i];
                     // Take image from index
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);

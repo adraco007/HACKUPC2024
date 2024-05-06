@@ -101,36 +101,28 @@ def select_similar_images():
     images_to_take, total_images = selector.select_images()
 
     index_list, similarity_list = processor.select_images_optimized(images_to_take)
-
     similarity_list = similarity_list.tolist()
-    
-    # map similarity to float 
     similarity_list = [float(i) for i in similarity_list]
-
-    # Map index to int 
     index_list = [int(i) for i in index_list]
-    print(index_list)
-    print(index_list)
-    print(similarity_list)
+
     # Return JSON response
     return jsonify({
         'indexs': index_list,
-        'similarities': similarity_list
+        'similarities': similarity_list,
+        'total_images': total_images
     })
 
+"""
+Get the indexs of the most similar images to the uploaded image, 
+given the settings that the user has selected
+"""
 @app.route('/process_uploaded_file', methods=['POST'])
 def process_uploaded_file():
-    # Get the formData from the request
-    season = request.form.get('season')
+
+    # Get the information from the form about the type of product we are looking for
+    season = request.form.get('season') 
     product_type = request.form.get('style')
     section = request.form.get('section')
-
-    # Get the uploaded file
-    uploaded_file = request.files['file']
-
-    # Save the file
-    uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
-
     if season == "Season":
         season = None
     if product_type == "Product Type":
@@ -138,14 +130,13 @@ def process_uploaded_file():
     if section == "Section":
         section = None
 
-    indexs = processor.find_outfit([season, product_type, section])
-    print(indexs)
-    indexs.sort()
+    # Get the uploaded image
+    uploaded_file = request.files['file']
+    uploaded_file.save('data/uploaded_images/' + uploaded_file.filename)
 
-    # Return JSON response
-    return jsonify({
-        'indexs': indexs
-    })
+    indexes = processor.find_outfit([season, product_type, section])
+
+    return jsonify({'indexes': indexes})
 
 if __name__ == '__main__':
     app.run(debug=True)
