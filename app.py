@@ -4,7 +4,7 @@ from src.processor import Processor
 from flask import request, jsonify, send_from_directory
 import os
 
-processor = Processor(download=False, load_model=True)
+processor = Processor(download=True, load_model=False)
 app = Flask(__name__)
 
 # Get templates
