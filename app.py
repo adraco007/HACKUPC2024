@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from src.random_image_selector import RandomImageSelector
 from src.processor import Processor
 from flask import request, jsonify, send_from_directory
-import os
+import os, time
 
 processor = Processor(download=True, load_model=False)
 app = Flask(__name__)
@@ -53,6 +53,7 @@ def images_from_index():
 """ From the index of an image, get the link of the product in the zara website """
 @app.route('/get_shop_link')
 def get_shop_link():
+    time.sleep(0.20)
     try:
         index = int(request.args.get('index'))
         print("Index parsed correctly")
