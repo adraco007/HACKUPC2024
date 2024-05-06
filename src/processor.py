@@ -12,30 +12,38 @@ Communication between the GUI and the backend
 """
 
 class Processor:
+    """
+
+    
+    """
     def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model.pkl'):
         self.data = None
-        
-        if load_model:
-            self.c = pickle.load(open(model_pathfile, 'rb'))
-        else:
-            self.c = ClipModel(download=download)
-            if download:
-                self.c.process_images()
+        self.model: ClipModel = None
 
-        self.embeddings, self.index_dict = self.c.load_embeddings(embeddings_folder='./data/embeddings/')
+        assert load_model or download, "A model has to be either loaded or downloaded"
+
+        if load_model:
+            self.model = pickle.load(open(model_pathfile, 'rb'))
+        else:
+            self.model = ClipModel(download=download)
+            if download:
+                self.model.process_images()
+
+        self.embeddings, self.index_dict = self.model.load_embeddings(embeddings_folder='./data/embeddings/')
 
 
     def find_outfit(self, vector, top_n=5):
-        #from data/generated_images/ take the name
-        names = os.listdir('./data/uploaded_images/')
-        name = names[0]
+        """
+        Given the image that the user has uploaded, return the top N most similar images
+        """
+        name = os.listdir('./data/uploaded_images/')[0]
         selected_image_pathfile = './data/uploaded_images/' + name
 
-        if not self.c.downloaded:
-            self.c.download(offline=True)
+        if not self.model.downloaded:
+            self.model.download(offline=True)
         if True:
             # Process the selected image to get its embedding
-            embedding_selected_image = self.c.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
+            embedding_selected_image = self.model.process_select_image(image_path=selected_image_pathfile, embedding_path='./data/embeddings/')
             # Load all embeddings
 
 
@@ -82,7 +90,7 @@ class Processor:
         given a vector of 1s and 0s, take from the images the ones that have a 1;
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
-        embeddings, indexes = self.c.select_embeddings(vector)
+        embeddings, indexes = self.model.select_embeddings(vector)
         
         e = EmbedsVisualizer()
         vector_indices, vector_similaridades = e.get_max_similarity_optimized(embeddings=embeddings, indexes=indexes)
@@ -129,6 +137,9 @@ class Processor:
         return embeddings, indexes
 
     def cosine_similarity(self, vec1, vec2):
+        """
+        Compute cosine similarity between two vectors.
+        """
         # Flatten the vectors to make sure they are 1-dimensional.
         vec1 = vec1.flatten()
         vec2 = vec2.flatten()
@@ -143,5 +154,3 @@ class Processor:
         Get the vectors of the canta rero
         """
         ImageClassifier().load_data()
-        pass 
-
