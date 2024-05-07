@@ -10,7 +10,7 @@ let rectangle = document.getElementById('visual_indicator');
 let goToGradio = document.getElementById('goToGradio');
 
 let urls = [];
-let actual_url = NaN;
+let actual_url = null;
 let urls_to_shop = [];
 
 document.getElementById('uploadButton').addEventListener('click', function (event) {
@@ -90,7 +90,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 
                 // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
                 if (urls_to_shop[0] !== null) {
-                    rectangle.style.backgroundColor = 'green';
+                    rectangle.style.backgroundColor = 'red';
                 } else {
                     rectangle.style.backgroundColor = 'gray';
                 }
@@ -150,7 +150,7 @@ prevButton.addEventListener('click', function (event) {
 
         // Check if this url to shop is not NaN, and if so put the rectangle green, else gray
         if (urls_to_shop[index - 1] !== null) {
-            rectangle.style.backgroundColor = 'red';
+            rectangle.style.backgroundColor = 'green';
         } else {
             rectangle.style.backgroundColor = 'gray';
         }
