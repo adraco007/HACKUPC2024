@@ -107,6 +107,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 });
 
 document.getElementById('fileInput').addEventListener('change', function () {
+    console.log(urls, urls_to_shop, actual_url);
     let fileName = this.value.split('\\').pop();
     let label = this.nextElementSibling;
     label.innerText = fileName;
