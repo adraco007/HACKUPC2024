@@ -59,28 +59,9 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     // Take image from index
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);
-
-                    // Use get image link to get link from the index of the image
-                    fetch('/get_shop_link?index=${index}', {
-                        method: 'GET'
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Failed to get image link');
-                            }
-                            // If the response is ok, handle the result
-                            return response.json();
-                        })
-                        .then(data => {
-                            // Handle the result
-                            console.log(data);
-                            urls_to_shop.push(data.url);
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            urls_to_shop.push(null);
-                            // Handle errors here
-                        });
+                    
+                    let url_to_shop = `/get_shop_link?index=${index}`;
+                    urls_to_shop.push(url_to_shop);
                 }
 
                 actual_url = urls[0];
@@ -107,7 +88,6 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 });
 
 document.getElementById('fileInput').addEventListener('change', function () {
-    console.log(urls, urls_to_shop, actual_url);
     let fileName = this.value.split('\\').pop();
     let label = this.nextElementSibling;
     label.innerText = fileName;
