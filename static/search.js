@@ -62,8 +62,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 
                     // Use get image link to get link from the index of the image
                     fetch('/get_shop_link?index=${index}', {
-                        method: 'GET',
-                        body: JSON.stringify({ index: index})
+                        method: 'GET'
                     })
                         .then(response => {
                             if (!response.ok) {
