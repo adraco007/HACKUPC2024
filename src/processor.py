@@ -16,7 +16,7 @@ class Processor:
 
     
     """
-    def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model_.pkl'):
+    def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model.pkl'):
         self.data = None
         self.model: ClipModel = None
 
