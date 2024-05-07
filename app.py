@@ -4,7 +4,17 @@ from src.processor import Processor
 from flask import request, jsonify, send_from_directory
 import os, time
 
-processor = Processor(download=True, load_model=False)
+# Look for a model in the data folder
+# Get the names
+names = os.listdir('models')
+if names == []:
+    print("No model found, downloading one and precomputing the embeddings, this may take a while")
+    processor = Processor(download=True, load_model=False)
+else:
+    print("Model found, loading it")
+    processor = Processor(download=False, load_model=True)
+    print("Model loaded, launching the server")
+    
 app = Flask(__name__)
 
 # Get templates

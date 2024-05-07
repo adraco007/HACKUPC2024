@@ -16,7 +16,7 @@ class Processor:
 
     
     """
-    def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model.pkl'):
+    def __init__(self, load_model=False, download=False, model_pathfile='./models/clip_model_.pkl'):
         self.data = None
         self.model: ClipModel = None
 
@@ -77,12 +77,12 @@ class Processor:
         """
         self.embeddings
         get_embeddings = False
+
         print("Processing images")
 
-        print("Embeddings processed")
         vector_indices, vector_similaridades = EmbedsVisualizer().get_max_similarity(embeddings, indexes=indexes,  vector_length=len(vector))
         #image = Image.open('data/generated_images/image1.png')
-        print(vector_similaridades)
+        print("Images processed, returning the most similar ones")
         return vector_indices, vector_similaridades
     
     def select_images_optimized(self, vector):
@@ -90,13 +90,17 @@ class Processor:
         given a vector of 1s and 0s, take from the images the ones that have a 1;
         separate them in clusters. inside each cluster, take the ones that are most similar from differents sets, take the cluster with the highest similarity, and return its top 4 similar images
         """
+
+        print("Processing images")
+
         embeddings, indexes = self.model.select_embeddings(vector)
         
         e = EmbedsVisualizer()
         vector_indices, vector_similaridades = e.get_max_similarity_optimized(embeddings=embeddings, indexes=indexes)
         #image = Image.open('data/generated_images/image1.png')
-        """print(vector_similaridades)
-        return vector_indices, vector_similaridades"""
+        
+        print("Images processed, returning the most similar ones")
+
         return vector_indices, vector_similaridades
     
     def get_embeddings(self, image_vector, image_path, selected_image_pathfile=None, created_model = False, model_pathfile = "./models/clip_model.pkl"):

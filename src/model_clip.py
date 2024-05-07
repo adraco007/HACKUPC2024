@@ -12,7 +12,9 @@ class ClipModel():
         self.downloaded = download
         self.preprocess = None
         self.model = None
+
         if download:
+            print("Downloading model")
             self.model, self.preprocess = clip.load('ViT-B/32', device=self.device)
             with open('./models/preprocess.pkl', 'wb') as f:
                 pickle.dump(self.preprocess, f)
@@ -119,7 +121,7 @@ class ClipModel():
         return embeddings, indexes
 
     def load_embeddings(self, embeddings_folder='./data/embeddings/', image_folder='./data/images/'):
-        # Cargar los embeddings de las imágenes
+        print("Loading embeddings")
         embeddings = {}
         self.list_dirs_emb = os.listdir(embeddings_folder)
         self.list_dirs_emb.sort()
