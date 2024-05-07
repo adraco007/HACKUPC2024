@@ -28,6 +28,7 @@ class Processor:
             self.model = ClipModel(download=download)
             if download:
                 self.model.process_images()
+            self.model.save_self(model_pathfile)
 
         self.embeddings, self.index_dict = self.model.load_embeddings(embeddings_folder='./data/embeddings/')
 
