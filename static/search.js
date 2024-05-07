@@ -60,8 +60,15 @@ document.getElementById('uploadButton').addEventListener('click', function (even
                     let url = `/images_from_index?index=${index}`;
                     urls.push(url);
                     
-                    let url_to_shop = `/get_shop_link?index=${index}`;
-                    urls_to_shop.push(url_to_shop);
+                    fetchShopLink(index)
+                    .then(url => {
+                        urls_to_shop.push(url);
+                        console.log(urls_to_shop); // Check the updated array
+                    })
+                    .catch(error => {
+                        console.error('Error fetching shop link:', error);
+                        urls_to_shop.push(null);
+                    });
                 }
 
                 actual_url = urls[0];
@@ -151,3 +158,9 @@ goToGradio.addEventListener('click', function () {
     window.open('https://a7d92eb8a3b6a421dc.gradio.live/');
 }
 );
+
+async function fetchShopLink(index) {
+    const response = await fetch(`/get_shop_link?index=${index}`);
+    const data = await response.json(); // assuming the response body is in JSON format
+    return data.url;
+}
