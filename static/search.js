@@ -9,13 +9,16 @@ let rectangle = document.getElementById('visual_indicator');
 
 let goToGradio = document.getElementById('goToGradio');
 
-// Add event listeners to the buttons
 let urls = [];
 let actual_url = NaN;
-let urls_to_shop =[NaN, NaN, NaN, NaN, NaN];
+let urls_to_shop = [];
 
 document.getElementById('uploadButton').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
+
+    // Clean the urls and urls_to_shop
+    urls = [];
+    urls_to_shop = [];
 
     // Get the selected file
     let fileInput = document.getElementById('fileInput');
