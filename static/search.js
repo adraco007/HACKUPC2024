@@ -38,7 +38,7 @@ document.getElementById('uploadButton').addEventListener('click', function (even
 
 
         // Call the Flask route for processing the uploaded file
-        fetch('/process_uploaded_file', {
+        fetch('/search_outfit', {
             method: 'POST',
             body: formData
         })

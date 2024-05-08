@@ -127,7 +127,7 @@ def select_similar_images():
 Get the indexs of the most similar images to the uploaded image, 
 given the settings that the user has selected
 """
-@app.route('/process_uploaded_file', methods=['POST'])
+@app.route('/search_outfit', methods=['POST'])
 def process_uploaded_file():
 
     # Get the information from the form about the type of product we are looking for
