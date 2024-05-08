@@ -239,10 +239,7 @@ class EmbedsVisualizer:
             viz_dict[filenames[idx]]= (similarity_list[count], related_names[count])
             count+=1
         self.visualize_embeddings(viz_dict)"""
-        print("aaaaaaaaaa",indices_matriz)
         vector_indexes = [indexes[filenames[idx]] for idx in indices_matriz]
-        print(indices_matriz)
-        print(filenames[indices_matriz[3]])
         return vector_indexes, similarity_list
 
 
