@@ -1,38 +1,37 @@
 import numpy as np
+from processor import Processor
+import os
+
+proc = Processor(download=True)
+embeddings_dict = proc.embeddings_dict
+
+keys_embs = sorted(os.listdir("./data/images"))
+# Convert dictionary to a list of embeddings and a list of corresponding image paths
+embeddings = np.array(list(embeddings_dict.values()))
+image_paths = list(embeddings_dict.keys())
+from sklearn.decomposition import PCA
+pca = PCA(n_components=3)
+reduced_embeddings = pca.fit_transform(embeddings)
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.decomposition import PCA
-import torch
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-embeddings = torch.load('./data/image_embeddings.pt', map_location=device)
-embeddings_tensor = torch.stack(list(embeddings.values())).squeeze(1)
-embeddings_np = embeddings_tensor.numpy() 
-# Suponiendo que embeddings_np ya está definido y contiene tus embeddings como array de NumPy
-pca = PCA()
-pca.fit(embeddings_np)
+def getImage(path, zoom=0.08):
+    return OffsetImage(plt.imread(path), zoom=zoom)
 
-# Calcular la varianza explicada acumulativa
-cumulative_variance = np.cumsum(pca.explained_variance_ratio_)
-
-# Preparar los datos para el gráfico
-num_components = np.arange(len(cumulative_variance)) + 1  # Número de componentes (dimensiones)
-zs = np.zeros_like(num_components)  # Eje ficticio (ahora será el eje X)
-
-# Crear el gráfico 3D
-fig = plt.figure(figsize=(10, 7))
+fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection='3d')
 
-# Dibujar el gráfico, colocando el número de componentes en el eje Z
-ax.plot(zs, cumulative_variance, num_components, marker='o', color='b')
+# Scatter plot
+x, y, z = reduced_embeddings[:, 0], reduced_embeddings[:, 1], reduced_embeddings[:, 2]
+sc = ax.scatter(x, y, z)
 
-# Añadir líneas verticales para cada punto para mejor visualización
-for x, y, z in zip(zs, cumulative_variance, num_components):
-    ax.plot([x, x], [y, y], [0, z], marker='_', color='red')
+# Adding image thumbnails
+for x0, y0, z0, path in zip(x, y, z, image_paths):
+    ab = AnnotationBbox(getImage(path), (x0, y0, z0), frameon=False, boxcoords="data")
+    ax.add_artist(ab)
 
-ax.set_xlabel('Eje Ficticio')
-ax.set_ylabel('Varianza Acumulativa Explicada')
-ax.set_zlabel('Número de Componentes')
-ax.set_title('Explicabilidad por Número de Dimensiones en 3D')
-
+ax.set_xlabel('PCA 1')
+ax.set_ylabel('PCA 2')
+ax.set_zlabel('PCA 3')
 plt.show()
