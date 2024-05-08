@@ -50,16 +50,14 @@ class Processor:
 
             # Compute cosine similarities
             similarities = {}
-            print("aaaaaaaaaa",embedding_selected_image)
+
             for key, embedding in self.embeddings.items():
                 sim = self.cosine_similarity(embedding_selected_image, embedding)
                 similarities[key] = sim
             
             # Sort by similarity and select top N
             sorted_keys = sorted(similarities, key=similarities.get, reverse=True)[:top_n]
-            print("aaaaaaa", similarities["img_26_1.jpg"])
-            print("aaaaaaa", sorted_keys)
-            print("aaaaaaa", len(self.embeddings))
+            
             # Convert filenames to numerical indices and return
             indices = []
             for key in sorted_keys:
