@@ -1,0 +1,3 @@
+Web:
+- Search outfits: cada vegada que es canvia es torna a carregar la imatge del servidor, s'hauria de carregar al principi totes juntes o la primera vegada que es pasa i després guardar-les
+- Les URLS surten desordenades, passar totes les urls juntes
