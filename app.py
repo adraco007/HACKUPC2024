@@ -81,7 +81,7 @@ def get_shop_link():
 
     with open('data/inditextech_hackupc_challenge_images.csv', 'r') as f:
         lines = f.readlines()
-        link = lines[x+1].split(',')[y-1] # Header is the first line, every set has images 1-3
+        link = lines[x+1].split(',')[y-1][1:-1] # Header is the first line, every set has images 1-3
 
     product_link = None
 
