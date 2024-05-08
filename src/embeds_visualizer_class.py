@@ -207,7 +207,7 @@ class EmbedsVisualizer:
             # Encontrar el máximo en la matriz de similitudes
             fila, next_idx = np.unravel_index(np.argmax(temporal_similarity_matrix), temporal_similarity_matrix.shape)
             max_similarity = temporal_similarity_matrix[fila, next_idx]
-            print(f'Se cumple?: {temporal_similarity_matrix[fila, next_idx]==similarity_matrix[next_idx, indices_matriz[fila]]}')
+            # print(f'Se cumple?: {temporal_similarity_matrix[fila, next_idx]==similarity_matrix[next_idx, indices_matriz[fila]]}')
             # Agregar la imagen con máxima similitud al diccionario
             max_similarities[i] = max_similarity
             
